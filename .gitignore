@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+cards/
+packs/
+__pycache__/
+*.pyc
+.Python
+.venv/
+venv/
+*.png
+!.gitkeep
+.DS_Store

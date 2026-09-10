@@ -1,0 +1,4 @@
+openai>=1.40.0
+requests>=2.31.0
+flask>=3.0.0
+gunicorn>=22.0.0

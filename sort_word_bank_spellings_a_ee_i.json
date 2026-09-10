@@ -1,0 +1,3689 @@
+{
+  "generated_at": "2026-08-25T17:17:17.666165+00:00",
+  "mode": "custom_spellings",
+  "requested_lesson": null,
+  "requested_lessons": null,
+  "requested_spellings": [
+    "a:",
+    "ee",
+    "i"
+  ],
+  "requested_contrast": null,
+  "focus_lesson": 37,
+  "snapped_to_nearest_spelling_lesson": false,
+  "previous_window": null,
+  "new_spellings": [],
+  "previous_spellings": [],
+  "selected_spellings": [
+    {
+      "symbol": "ā",
+      "pronounced": "āāā",
+      "as_in": "ate",
+      "voiced": "Voiced",
+      "lesson": 37,
+      "stage": 2
+    },
+    {
+      "symbol": "ē",
+      "pronounced": "ēēē",
+      "as_in": "eat",
+      "voiced": "Voiced",
+      "lesson": 5,
+      "stage": 1
+    },
+    {
+      "symbol": "i",
+      "pronounced": "iii",
+      "as_in": "if",
+      "voiced": "Voiced",
+      "lesson": 14,
+      "stage": 2
+    }
+  ],
+  "sources": {
+    "spellings": "C:\\Users\\chris\\OneDrive\\Desktop\\TYCTR Decodables x Midjourney\\TYCTR_GPC_Words (2).xlsx - Spellings.csv",
+    "biemiller": "C:\\Users\\chris\\OneDrive\\Desktop\\TYCTR Decodables x Midjourney\\Kuperman X Biemiller - e.rated_biemiller.csv",
+    "rank_field": "Rating.Mean",
+    "rank_note": "Rating.Mean used as familiarity/frequency proxy (same convention as TYCTR decodable analyzer)."
+  },
+  "pools": {
+    "ā": {
+      "symbol": "ā",
+      "lesson": 37,
+      "as_in": "ate",
+      "pronounced": "āāā",
+      "letter": "a",
+      "usable_as_header": true,
+      "start_count": 87,
+      "end_count": 31,
+      "top_start_nouns": [
+        {
+          "word": "air",
+          "mean": 139.0196
+        },
+        {
+          "word": "army",
+          "mean": 85.6863
+        },
+        {
+          "word": "accident",
+          "mean": 81.2941
+        },
+        {
+          "word": "age",
+          "mean": 79.1961
+        },
+        {
+          "word": "area",
+          "mean": 74.9216
+        },
+        {
+          "word": "arm",
+          "mean": 65.4118
+        },
+        {
+          "word": "aunt",
+          "mean": 55.1961
+        },
+        {
+          "word": "address",
+          "mean": 52.2745
+        }
+      ],
+      "top_end_nouns": [
+        {
+          "word": "idea",
+          "mean": 359.0392
+        },
+        {
+          "word": "ma",
+          "mean": 185.8039
+        },
+        {
+          "word": "area",
+          "mean": 74.9216
+        },
+        {
+          "word": "sea",
+          "mean": 59.8431
+        },
+        {
+          "word": "tea",
+          "mean": 58.6275
+        },
+        {
+          "word": "camera",
+          "mean": 57.0
+        },
+        {
+          "word": "papa",
+          "mean": 42.5882
+        },
+        {
+          "word": "pizza",
+          "mean": 33.5098
+        }
+      ],
+      "caveat": {
+        "wrong_examples": [
+          "apple",
+          "ant",
+          "animal",
+          "and",
+          "ask",
+          "angry"
+        ],
+        "note": "TYCTR ā is long /ā/ as in ate — reject short-a pictures."
+      }
+    },
+    "ē": {
+      "symbol": "ē",
+      "lesson": 5,
+      "as_in": "eat",
+      "pronounced": "ēēē",
+      "letter": "e",
+      "usable_as_header": true,
+      "start_count": 43,
+      "end_count": 445,
+      "top_start_nouns": [
+        {
+          "word": "eye",
+          "mean": 111.7843
+        },
+        {
+          "word": "earth",
+          "mean": 99.4902
+        },
+        {
+          "word": "evil",
+          "mean": 73.1569
+        },
+        {
+          "word": "enemy",
+          "mean": 48.5098
+        },
+        {
+          "word": "ear",
+          "mean": 32.0
+        },
+        {
+          "word": "example",
+          "mean": 29.9412
+        },
+        {
+          "word": "express",
+          "mean": 17.9216
+        },
+        {
+          "word": "exercise",
+          "mean": 17.7255
+        }
+      ],
+      "top_end_nouns": [
+        {
+          "word": "time",
+          "mean": 1958.6275
+        },
+        {
+          "word": "people",
+          "mean": 1102.9804
+        },
+        {
+          "word": "life",
+          "mean": 796.6471
+        },
+        {
+          "word": "home",
+          "mean": 774.3333
+        },
+        {
+          "word": "name",
+          "mean": 641.8627
+        },
+        {
+          "word": "place",
+          "mean": 602.6667
+        },
+        {
+          "word": "house",
+          "mean": 514.0
+        },
+        {
+          "word": "course",
+          "mean": 487.2157
+        }
+      ],
+      "caveat": {
+        "wrong_examples": [
+          "egg",
+          "elephant",
+          "end",
+          "elbow",
+          "exit",
+          "engine",
+          "edge",
+          "every",
+          "else"
+        ],
+        "note": "TYCTR ē is long /ē/ as in eat — reject short-e pictures."
+      }
+    },
+    "i": {
+      "symbol": "i",
+      "lesson": 14,
+      "as_in": "if",
+      "pronounced": "iii",
+      "letter": "i",
+      "usable_as_header": true,
+      "start_count": 20,
+      "end_count": 3,
+      "top_start_nouns": [
+        {
+          "word": "inside",
+          "mean": 211.2745
+        },
+        {
+          "word": "ill",
+          "mean": 21.2745
+        },
+        {
+          "word": "inch",
+          "mean": 12.3725
+        },
+        {
+          "word": "inn",
+          "mean": 8.3922
+        },
+        {
+          "word": "ink",
+          "mean": 7.4902
+        },
+        {
+          "word": "insect",
+          "mean": 3.1569
+        },
+        {
+          "word": "igloo",
+          "mean": 0.2941
+        },
+        {
+          "word": "indian",
+          "mean": 0.0
+        }
+      ],
+      "top_end_nouns": [
+        {
+          "word": "spaghetti",
+          "mean": 5.9216
+        },
+        {
+          "word": "macaroni",
+          "mean": 3.2549
+        },
+        {
+          "word": "salami",
+          "mean": 2.2353
+        }
+      ],
+      "caveat": {
+        "wrong_examples": [
+          "ice",
+          "idea",
+          "island",
+          "iron",
+          "iris",
+          "idol",
+          "item"
+        ],
+        "note": "TYCTR i is short /i/ as in if — reject long-i pictures."
+      }
+    }
+  },
+  "edge_lists": {
+    "ā": {
+      "start": [
+        {
+          "word": "a",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 20415.2745,
+          "pos": "art.",
+          "meaning": "one, any",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "all",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 5161.8627,
+          "pos": "pron.",
+          "meaning": "everyone",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "about",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 3631.4902,
+          "pos": "adv.",
+          "meaning": "almost",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "at",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 3217.098,
+          "pos": "prep.",
+          "meaning": "in or on",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "as",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 2217.0196,
+          "pos": "conj.",
+          "meaning": "when",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "any",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 1099.3725,
+          "pos": "adj.",
+          "meaning": "no special one",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "again",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 792.7059,
+          "pos": "adv.",
+          "meaning": "once more",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "around",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 736.7255,
+          "pos": "adj.",
+          "meaning": "near",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "away",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 730.902,
+          "pos": "adj.",
+          "meaning": "far off",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "after",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 682.5882,
+          "pos": "prep.",
+          "meaning": "looking for",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "always",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 655.2549,
+          "pos": "adv.",
+          "meaning": "at all times",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "alone",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 308.5294,
+          "pos": "adv.",
+          "meaning": "by yourself",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "afraid",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 247.6667,
+          "pos": "adj.",
+          "meaning": "scared",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "against",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 201.7255,
+          "pos": "prep.",
+          "meaning": "next to",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ahead",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 198.3333,
+          "pos": "prep.",
+          "meaning": "in front of",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "almost",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 193.2745,
+          "pos": "adv.",
+          "meaning": "nearly",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "along",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 182.9412,
+          "pos": "adv.",
+          "meaning": "together with another",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "answer",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 176.1961,
+          "pos": "v.",
+          "meaning": "reply",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "able",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 159.902,
+          "pos": "adj.",
+          "meaning": "having the power to do something",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "alive",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 154.4706,
+          "pos": "adj.",
+          "meaning": "lively",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "air",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 139.0196,
+          "pos": "n.",
+          "meaning": "what you breathe",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "act",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 109.1176,
+          "pos": "v.",
+          "meaning": "to behave in a certain way",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "across",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 94.1373,
+          "pos": "prep.",
+          "meaning": "from one side to the other",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "army",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 85.6863,
+          "pos": "n.",
+          "meaning": "a large group of soldiers",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "accident",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 81.2941,
+          "pos": "n.",
+          "meaning": "an unplanned happening",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "age",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 79.1961,
+          "pos": "n.",
+          "meaning": "time of life",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "area",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 74.9216,
+          "pos": "n.",
+          "meaning": "a part of a country",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "art",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 70.8039,
+          "pos": "adj.",
+          "meaning": "drawing",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arm",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 65.4118,
+          "pos": "n.",
+          "meaning": "a part of a chair",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "agree",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 64.6667,
+          "pos": "v.",
+          "meaning": "to think the same way",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "awful",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 63.4118,
+          "pos": "adj.",
+          "meaning": "terrible, very bad",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "admit",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 59.1961,
+          "pos": "v.",
+          "meaning": "to accept as true",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "aunt",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 55.1961,
+          "pos": "n.",
+          "meaning": "your parent’s sister",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "address",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 52.2745,
+          "pos": "n.",
+          "meaning": "a speech",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "above",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 48.8824,
+          "pos": "prep.",
+          "meaning": "more than",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "advice",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 47.9804,
+          "pos": "n.",
+          "meaning": "helpful information",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "account",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 44.7059,
+          "pos": "n.",
+          "meaning": "money in a bank",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "afford",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 44.4314,
+          "pos": "v.",
+          "meaning": "to be able to pay for",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "allow",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 44.3725,
+          "pos": "v.",
+          "meaning": "to permit",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "add",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 33.0588,
+          "pos": "v.",
+          "meaning": "to find the sum",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "alarm",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 29.8431,
+          "pos": "n.",
+          "meaning": "a warning signal",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "awake",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 26.7059,
+          "pos": "v.",
+          "meaning": "to stop sleeping",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "amount",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 24.7451,
+          "pos": "n.",
+          "meaning": "add up to",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "appear",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 23.3725,
+          "pos": "v.",
+          "meaning": "to come into sight",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "anger",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 19.4314,
+          "pos": "n.",
+          "meaning": "being mad",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arrive",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 18.6863,
+          "pos": "v.",
+          "meaning": "to get to a destination",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "avenue",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 16.8824,
+          "pos": "n.",
+          "meaning": "a street",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "alley",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 16.2941,
+          "pos": "n.",
+          "meaning": "a bowling lane",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arrange",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 15.5098,
+          "pos": "v.",
+          "meaning": "to put in order",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "aim",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 14.8627,
+          "pos": "v.",
+          "meaning": "to direct toward",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "end": [
+        {
+          "word": "a",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 20415.2745,
+          "pos": "art.",
+          "meaning": "one, any",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "idea",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 359.0392,
+          "pos": "n.",
+          "meaning": "a plan in mind",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ma",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 185.8039,
+          "pos": "n.",
+          "meaning": "mother",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "area",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 74.9216,
+          "pos": "n.",
+          "meaning": "a part of a country",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "sea",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 59.8431,
+          "pos": "n.",
+          "meaning": "a large body of salt water",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "extra",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 59.1569,
+          "pos": "adj.",
+          "meaning": "something added to what is usual or needed",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "tea",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 58.6275,
+          "pos": "n.",
+          "meaning": "a drink",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "camera",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 57.0,
+          "pos": "n.",
+          "meaning": "a device for taking pictures",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "papa",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 42.5882,
+          "pos": "n.",
+          "meaning": "father",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "pizza",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 33.5098,
+          "pos": "n.",
+          "meaning": "Italian pie made with cheese, tomato, plus toppings",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "soda",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 19.8431,
+          "pos": "n.",
+          "meaning": "an ice-cream drink",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "banana",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 10.7255,
+          "pos": "n.",
+          "meaning": "a fruit with a thick yellow skin",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "tuna",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 8.0,
+          "pos": "n.",
+          "meaning": "a large salt-water fish",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "umbrella",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 7.4902,
+          "pos": "n.",
+          "meaning": "a device that protects from rain",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "cafeteria",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 5.6667,
+          "pos": "n.",
+          "meaning": "a place to choose the food, pay, and seat yourself",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "cocoa",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 5.0196,
+          "pos": "n.",
+          "meaning": "a chocolate drink",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "pea",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 3.902,
+          "pos": "n.",
+          "meaning": "a small round vegetable that grows in a pod",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "asthma",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 3.8627,
+          "pos": "n.",
+          "meaning": "a disease that affects breathing",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "zebra",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 2.5098,
+          "pos": "n.",
+          "meaning": "a large, striped animal",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ballerina",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 2.3137,
+          "pos": "n.",
+          "meaning": "a female ballet dancer",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "panda",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 2.1176,
+          "pos": "n.",
+          "meaning": "a black-and-white bear-like animal",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "hula",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 1.9608,
+          "pos": "n.",
+          "meaning": "a native Hawaiian dance",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "encyclopedia",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 1.5882,
+          "pos": "n.",
+          "meaning": "book with information about many subjects",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "fiesta",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 1.2549,
+          "pos": "n.",
+          "meaning": "a celebration",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "comma",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.9804,
+          "pos": "n.",
+          "meaning": "a punctuation mark",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "bandanna",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.4118,
+          "pos": "n.",
+          "meaning": "a colored handkerchief worn around the neck",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "america",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "the United States",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "baa",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.0,
+          "pos": "v.",
+          "meaning": "the sound a sheep makes",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "china",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "dishes and cups",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "fa",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "a musical note",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "la",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "end",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "the sixth note of the major scale",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ]
+    },
+    "ē": {
+      "start": [
+        {
+          "word": "even",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 875.9216,
+          "pos": "adj.",
+          "meaning": "divided equally",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ever",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 709.2157,
+          "pos": "adv.",
+          "meaning": "at anytime",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enough",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 501.3333,
+          "pos": "adj.",
+          "meaning": "as much as needed",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eat",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 251.8824,
+          "pos": "v.",
+          "meaning": "to chew on and swallow food",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "evening",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 120.6863,
+          "pos": "adj.",
+          "meaning": "late afternoon",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eye",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.7843,
+          "pos": "n.",
+          "meaning": "a hole in a needle",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "except",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.6863,
+          "pos": "prep.",
+          "meaning": "but",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "explain",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.1765,
+          "pos": "v.",
+          "meaning": "to give the reason for",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "early",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 108.0392,
+          "pos": "adv.",
+          "meaning": "near the start of something",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "earth",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 99.4902,
+          "pos": "n.",
+          "meaning": "the ground",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eight",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 98.2353,
+          "pos": "adj.",
+          "meaning": "the number that is one more than seven (8)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enjoy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 82.7843,
+          "pos": "v.",
+          "meaning": "to take pleasure in",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "evil",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 73.1569,
+          "pos": "n.",
+          "meaning": "bad or wrong",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "extra",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 59.1569,
+          "pos": "adj.",
+          "meaning": "something added to what is usual or needed",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "east",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 49.549,
+          "pos": "adv.",
+          "meaning": "a direction",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enemy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 48.5098,
+          "pos": "n.",
+          "meaning": "a person who wishes harm to another",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "empty",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 47.2353,
+          "pos": "adj.",
+          "meaning": "having nothing in it",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "escape",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 44.2745,
+          "pos": "v.",
+          "meaning": "to stay safe from",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ear",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 32.0,
+          "pos": "n.",
+          "meaning": "the part of the body used to hear",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "example",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 29.9412,
+          "pos": "n.",
+          "meaning": "a sample",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enter",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 29.7255,
+          "pos": "v.",
+          "meaning": "to go into",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "expert",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 22.1176,
+          "pos": "adj.",
+          "meaning": "highly skilled",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "express",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.9216,
+          "pos": "n.",
+          "meaning": "a fast form for delivering something",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "exercise",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.7255,
+          "pos": "n.",
+          "meaning": "activity that improves the body’s condition",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "earn",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 15.3529,
+          "pos": "v.",
+          "meaning": "to get pay for work",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "equal",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 13.3725,
+          "pos": "adj.",
+          "meaning": "a symbol used in arithmetic",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eleven",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 12.9804,
+          "pos": "adj.",
+          "meaning": "one more than ten (11)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eagle",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 11.4902,
+          "pos": "n.",
+          "meaning": "a large, strong bird",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "envelope",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 10.0588,
+          "pos": "v.",
+          "meaning": "a container for a letter",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eager",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 6.8627,
+          "pos": "adj.",
+          "meaning": "to want very much to do something",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eighth",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 6.8627,
+          "pos": "adj.",
+          "meaning": "the number after seventh",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "explore",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 6.2157,
+          "pos": "v.",
+          "meaning": "to search for",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "errand",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 4.0,
+          "pos": "n.",
+          "meaning": "a short trip to do something specific",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eighty",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 2.5294,
+          "pos": "v.",
+          "meaning": "eight times ten (80)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eskimo",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.6471,
+          "pos": "n.",
+          "meaning": "a member of a group living in the Arctic north",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "encyclopedia",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.5882,
+          "pos": "n.",
+          "meaning": "book with information about many subjects",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eel",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.4314,
+          "pos": "n.",
+          "meaning": "a long, thin fish",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "elm",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.4314,
+          "pos": "n.",
+          "meaning": "a type of tree",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "elect",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.4118,
+          "pos": "v.",
+          "meaning": "to choose by vote",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "elastic",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.0392,
+          "pos": "adj.",
+          "meaning": "can be stretched",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "epilepsy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 1.0392,
+          "pos": "n.",
+          "meaning": "a disease of the brain",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "erupt",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 0.3922,
+          "pos": "v.",
+          "meaning": "to burst suddenly and with force",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eighteen",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "adj.",
+          "meaning": "the number that is seventeen plus one (18)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "end": [
+        {
+          "word": "me",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 9241.9412,
+          "pos": "pron.",
+          "meaning": "the person who is speaking or writing",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "we",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 9011.902,
+          "pos": "pron.",
+          "meaning": "the persons who are speaking or writing",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "he",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 7637.1961,
+          "pos": "pron.",
+          "meaning": "a male person or animal that is being talked about",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "have",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 6161.4118,
+          "pos": "v.",
+          "meaning": "to own",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "here",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 4525.2549,
+          "pos": "adv.",
+          "meaning": "in this place",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "there",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 4348.1176,
+          "pos": "adv.",
+          "meaning": "in that place",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "she",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 3732.8824,
+          "pos": "pron.",
+          "meaning": "a female that has been spoken about",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "come",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 3140.9804,
+          "pos": "v.",
+          "meaning": "to get closer",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "one",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 3072.2353,
+          "pos": "adj.",
+          "meaning": "a single person",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "see",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 2556.7255,
+          "pos": "v.",
+          "meaning": "to go find out",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "time",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1958.6275,
+          "pos": "n.",
+          "meaning": "free hours or moments",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "take",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1891.0392,
+          "pos": "v.",
+          "meaning": "to choose or select",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "some",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1727.2353,
+          "pos": "adj.",
+          "meaning": "a little",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "little",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1446.3922,
+          "pos": "adj.",
+          "meaning": "a small amount",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "more",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1298.5882,
+          "pos": "adj.",
+          "meaning": "greater in amount, number, or degree",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "give",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1167.8235,
+          "pos": "v.",
+          "meaning": "to hand over",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "love",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1114.9804,
+          "pos": "v.",
+          "meaning": "to have deep feeling for",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "people",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1102.9804,
+          "pos": "n.",
+          "meaning": "human beings",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "sure",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 1099.8235,
+          "pos": "adj.",
+          "meaning": "certain",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "life",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 796.6471,
+          "pos": "n.",
+          "meaning": "a way of living",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "before",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 794.1373,
+          "pos": "adv.",
+          "meaning": "earlier in time",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "home",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 774.3333,
+          "pos": "n.",
+          "meaning": "the place where you live",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "nice",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 649.5098,
+          "pos": "adj.",
+          "meaning": "has fine manners; polite",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "name",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 641.8627,
+          "pos": "n.",
+          "meaning": "what a person is called",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "place",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 602.6667,
+          "pos": "n.",
+          "meaning": "a location in an area such as a town or city",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "leave",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 560.7059,
+          "pos": "v.",
+          "meaning": "to give or hand over",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "three",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 542.2353,
+          "pos": "adj.",
+          "meaning": "a number that is one more than two (3)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "house",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 514.0,
+          "pos": "n.",
+          "meaning": "a building to live in",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "course",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 487.2157,
+          "pos": "n.",
+          "meaning": "a series of studies",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "care",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 485.2549,
+          "pos": "v.",
+          "meaning": "to be fond of",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "move",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 418.1373,
+          "pos": "v.",
+          "meaning": "to be in motion",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "same",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 417.1765,
+          "pos": "adj.",
+          "meaning": "just like something else",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "minute",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 377.4902,
+          "pos": "n.",
+          "meaning": "a unit of time equal to sixty seconds",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "while",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 349.4314,
+          "pos": "adv.",
+          "meaning": "a period of time",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "wife",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 348.9216,
+          "pos": "n.",
+          "meaning": "a married woman",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "once",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 344.8824,
+          "pos": "adv.",
+          "meaning": "one time only",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "live",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 344.5882,
+          "pos": "adj.",
+          "meaning": "to be alive",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "use",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 343.8431,
+          "pos": "n.",
+          "meaning": "what something is good for",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "hope",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 320.6275,
+          "pos": "v.",
+          "meaning": "to expect and wish for something",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "cause",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 310.0392,
+          "pos": "n.",
+          "meaning": "the reason something happens",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "alone",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 308.5294,
+          "pos": "adv.",
+          "meaning": "by yourself",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "face",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 289.1569,
+          "pos": "n.",
+          "meaning": "the front part of the head",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "five",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 285.451,
+          "pos": "adj.",
+          "meaning": "one more than four (5)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "late",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 269.7255,
+          "pos": "adj.",
+          "meaning": "not on time",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "phone",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 269.7255,
+          "pos": "n.",
+          "meaning": "a telephone",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "die",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 261.1373,
+          "pos": "v.",
+          "meaning": "to stop living",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "mine",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 250.9804,
+          "pos": "n.",
+          "meaning": "underground diggings",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "change",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 240.3529,
+          "pos": "n.",
+          "meaning": "coins",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "police",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 236.1569,
+          "pos": "adj.",
+          "meaning": "officers of the law",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "game",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "end",
+          "mean": 233.8431,
+          "pos": "n.",
+          "meaning": "a form of play",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ]
+    },
+    "i": {
+      "start": [
+        {
+          "word": "in",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 9773.4118,
+          "pos": "adv.",
+          "meaning": "not outside",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "if",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 3541.3725,
+          "pos": "conj.",
+          "meaning": "supposing that",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "into",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 844.5882,
+          "pos": "prep.",
+          "meaning": "toward the inside",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inside",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 211.2745,
+          "pos": "n.",
+          "meaning": "indoors",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "instead",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 79.2745,
+          "pos": "prep.",
+          "meaning": "in place of",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "invite",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 29.5882,
+          "pos": "v.",
+          "meaning": "to ask to come",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ill",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 21.2745,
+          "pos": "n.",
+          "meaning": "sick",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inch",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 12.3725,
+          "pos": "n.",
+          "meaning": "one twelfth of a foot",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "invisible",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 12.3529,
+          "pos": "adj.",
+          "meaning": "cannot be seen",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "interfere",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 9.5294,
+          "pos": "v.",
+          "meaning": "to get in the way",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inn",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 8.3922,
+          "pos": "n.",
+          "meaning": "a small hotel",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ink",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 7.4902,
+          "pos": "n.",
+          "meaning": "liquid used for writing",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "invent",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 4.6078,
+          "pos": "v.",
+          "meaning": "to make something new",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "itch",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 4.1765,
+          "pos": "v.",
+          "meaning": "a tickling or stinging feeling on the skin",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "insect",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 3.1569,
+          "pos": "n.",
+          "meaning": "a six-legged bug",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "irritate",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.9412,
+          "pos": "v.",
+          "meaning": "to make sore or sensitive",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "igloo",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.2941,
+          "pos": "n.",
+          "meaning": "a place to live made of snow and ice",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inclose",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "v.",
+          "meaning": "to fence in (another word for enclose)",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "indian",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "Native American",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "is",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "v.",
+          "meaning": "happening now",
+          "noun": false,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "end": [
+        {
+          "word": "spaghetti",
+          "sound": "i",
+          "spelling": "i",
+          "position": "end",
+          "mean": 5.9216,
+          "pos": "n.",
+          "meaning": "a type of pasta",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "macaroni",
+          "sound": "i",
+          "spelling": "i",
+          "position": "end",
+          "mean": 3.2549,
+          "pos": "n.",
+          "meaning": "a type of noodle often served with cheese",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "salami",
+          "sound": "i",
+          "spelling": "i",
+          "position": "end",
+          "mean": 2.2353,
+          "pos": "n.",
+          "meaning": "a kind of sausage",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ]
+    }
+  },
+  "sorts": [
+    {
+      "id": "custom_spellings_a_e_i_all",
+      "title": "custom_spellings: /ā/ vs /ē/ vs /i/",
+      "type": "closed_picture_sort",
+      "focus": "initial_sound",
+      "focus_lesson": 37,
+      "available_after_lesson": 37,
+      "headers": [
+        {
+          "spelling": "ā",
+          "as_in": "ate",
+          "lesson": 37,
+          "key_idea": "ate",
+          "position": "start"
+        },
+        {
+          "spelling": "ē",
+          "as_in": "eat",
+          "lesson": 5,
+          "key_idea": "eat",
+          "position": "start"
+        },
+        {
+          "spelling": "i",
+          "as_in": "if",
+          "lesson": 14,
+          "key_idea": "if",
+          "position": "start"
+        }
+      ],
+      "words": [
+        {
+          "word": "air",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 139.0196,
+          "pos": "n.",
+          "meaning": "what you breathe",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "army",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 85.6863,
+          "pos": "n.",
+          "meaning": "a large group of soldiers",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "accident",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 81.2941,
+          "pos": "n.",
+          "meaning": "an unplanned happening",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "age",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 79.1961,
+          "pos": "n.",
+          "meaning": "time of life",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "area",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 74.9216,
+          "pos": "n.",
+          "meaning": "a part of a country",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arm",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 65.4118,
+          "pos": "n.",
+          "meaning": "a part of a chair",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "aunt",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 55.1961,
+          "pos": "n.",
+          "meaning": "your parent’s sister",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "address",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 52.2745,
+          "pos": "n.",
+          "meaning": "a speech",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eye",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.7843,
+          "pos": "n.",
+          "meaning": "a hole in a needle",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "earth",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 99.4902,
+          "pos": "n.",
+          "meaning": "the ground",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "evil",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 73.1569,
+          "pos": "n.",
+          "meaning": "bad or wrong",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enemy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 48.5098,
+          "pos": "n.",
+          "meaning": "a person who wishes harm to another",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ear",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 32.0,
+          "pos": "n.",
+          "meaning": "the part of the body used to hear",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "example",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 29.9412,
+          "pos": "n.",
+          "meaning": "a sample",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "express",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.9216,
+          "pos": "n.",
+          "meaning": "a fast form for delivering something",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "exercise",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.7255,
+          "pos": "n.",
+          "meaning": "activity that improves the body’s condition",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inside",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 211.2745,
+          "pos": "n.",
+          "meaning": "indoors",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ill",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 21.2745,
+          "pos": "n.",
+          "meaning": "sick",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inch",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 12.3725,
+          "pos": "n.",
+          "meaning": "one twelfth of a foot",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inn",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 8.3922,
+          "pos": "n.",
+          "meaning": "a small hotel",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ink",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 7.4902,
+          "pos": "n.",
+          "meaning": "liquid used for writing",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "insect",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 3.1569,
+          "pos": "n.",
+          "meaning": "a six-legged bug",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "igloo",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.2941,
+          "pos": "n.",
+          "meaning": "a place to live made of snow and ice",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "indian",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "Native American",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "word_count": 24,
+      "notes": [
+        "TYCTR ā is long /ā/ as in ate — reject short-a pictures.",
+        "TYCTR ē is long /ē/ as in eat — reject short-e pictures.",
+        "TYCTR i is short /i/ as in if — reject long-i pictures."
+      ]
+    },
+    {
+      "id": "custom_spellings_a_vs_e",
+      "title": "custom_spellings: /ā/ vs /ē/",
+      "type": "closed_picture_sort",
+      "focus": "initial_sound",
+      "focus_lesson": 37,
+      "available_after_lesson": 37,
+      "headers": [
+        {
+          "spelling": "ā",
+          "as_in": "ate",
+          "lesson": 37,
+          "key_idea": "ate",
+          "position": "start"
+        },
+        {
+          "spelling": "ē",
+          "as_in": "eat",
+          "lesson": 5,
+          "key_idea": "eat",
+          "position": "start"
+        }
+      ],
+      "words": [
+        {
+          "word": "air",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 139.0196,
+          "pos": "n.",
+          "meaning": "what you breathe",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "army",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 85.6863,
+          "pos": "n.",
+          "meaning": "a large group of soldiers",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "accident",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 81.2941,
+          "pos": "n.",
+          "meaning": "an unplanned happening",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "age",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 79.1961,
+          "pos": "n.",
+          "meaning": "time of life",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "area",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 74.9216,
+          "pos": "n.",
+          "meaning": "a part of a country",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arm",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 65.4118,
+          "pos": "n.",
+          "meaning": "a part of a chair",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "aunt",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 55.1961,
+          "pos": "n.",
+          "meaning": "your parent’s sister",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "address",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 52.2745,
+          "pos": "n.",
+          "meaning": "a speech",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "eye",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.7843,
+          "pos": "n.",
+          "meaning": "a hole in a needle",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "earth",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 99.4902,
+          "pos": "n.",
+          "meaning": "the ground",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "evil",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 73.1569,
+          "pos": "n.",
+          "meaning": "bad or wrong",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enemy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 48.5098,
+          "pos": "n.",
+          "meaning": "a person who wishes harm to another",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ear",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 32.0,
+          "pos": "n.",
+          "meaning": "the part of the body used to hear",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "example",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 29.9412,
+          "pos": "n.",
+          "meaning": "a sample",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "express",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.9216,
+          "pos": "n.",
+          "meaning": "a fast form for delivering something",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "exercise",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.7255,
+          "pos": "n.",
+          "meaning": "activity that improves the body’s condition",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "word_count": 16,
+      "notes": [
+        "TYCTR ā is long /ā/ as in ate — reject short-a pictures.",
+        "TYCTR ē is long /ē/ as in eat — reject short-e pictures."
+      ]
+    },
+    {
+      "id": "custom_spellings_a_vs_i",
+      "title": "custom_spellings: /ā/ vs /i/",
+      "type": "closed_picture_sort",
+      "focus": "initial_sound",
+      "focus_lesson": 37,
+      "available_after_lesson": 37,
+      "headers": [
+        {
+          "spelling": "ā",
+          "as_in": "ate",
+          "lesson": 37,
+          "key_idea": "ate",
+          "position": "start"
+        },
+        {
+          "spelling": "i",
+          "as_in": "if",
+          "lesson": 14,
+          "key_idea": "if",
+          "position": "start"
+        }
+      ],
+      "words": [
+        {
+          "word": "air",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 139.0196,
+          "pos": "n.",
+          "meaning": "what you breathe",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "army",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 85.6863,
+          "pos": "n.",
+          "meaning": "a large group of soldiers",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "accident",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 81.2941,
+          "pos": "n.",
+          "meaning": "an unplanned happening",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "age",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 79.1961,
+          "pos": "n.",
+          "meaning": "time of life",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "area",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 74.9216,
+          "pos": "n.",
+          "meaning": "a part of a country",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "arm",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 65.4118,
+          "pos": "n.",
+          "meaning": "a part of a chair",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "aunt",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 55.1961,
+          "pos": "n.",
+          "meaning": "your parent’s sister",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "address",
+          "sound": "ā",
+          "spelling": "ā",
+          "position": "start",
+          "mean": 52.2745,
+          "pos": "n.",
+          "meaning": "a speech",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inside",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 211.2745,
+          "pos": "n.",
+          "meaning": "indoors",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ill",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 21.2745,
+          "pos": "n.",
+          "meaning": "sick",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inch",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 12.3725,
+          "pos": "n.",
+          "meaning": "one twelfth of a foot",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inn",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 8.3922,
+          "pos": "n.",
+          "meaning": "a small hotel",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ink",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 7.4902,
+          "pos": "n.",
+          "meaning": "liquid used for writing",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "insect",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 3.1569,
+          "pos": "n.",
+          "meaning": "a six-legged bug",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "igloo",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.2941,
+          "pos": "n.",
+          "meaning": "a place to live made of snow and ice",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "indian",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "Native American",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "word_count": 16,
+      "notes": [
+        "TYCTR ā is long /ā/ as in ate — reject short-a pictures.",
+        "TYCTR i is short /i/ as in if — reject long-i pictures."
+      ]
+    },
+    {
+      "id": "custom_spellings_e_vs_i",
+      "title": "custom_spellings: /ē/ vs /i/",
+      "type": "closed_picture_sort",
+      "focus": "initial_sound",
+      "focus_lesson": 14,
+      "available_after_lesson": 14,
+      "headers": [
+        {
+          "spelling": "ē",
+          "as_in": "eat",
+          "lesson": 5,
+          "key_idea": "eat",
+          "position": "start"
+        },
+        {
+          "spelling": "i",
+          "as_in": "if",
+          "lesson": 14,
+          "key_idea": "if",
+          "position": "start"
+        }
+      ],
+      "words": [
+        {
+          "word": "eye",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 111.7843,
+          "pos": "n.",
+          "meaning": "a hole in a needle",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "earth",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 99.4902,
+          "pos": "n.",
+          "meaning": "the ground",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "evil",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 73.1569,
+          "pos": "n.",
+          "meaning": "bad or wrong",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "enemy",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 48.5098,
+          "pos": "n.",
+          "meaning": "a person who wishes harm to another",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ear",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 32.0,
+          "pos": "n.",
+          "meaning": "the part of the body used to hear",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "example",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 29.9412,
+          "pos": "n.",
+          "meaning": "a sample",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "express",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.9216,
+          "pos": "n.",
+          "meaning": "a fast form for delivering something",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "exercise",
+          "sound": "ē",
+          "spelling": "ē",
+          "position": "start",
+          "mean": 17.7255,
+          "pos": "n.",
+          "meaning": "activity that improves the body’s condition",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inside",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 211.2745,
+          "pos": "n.",
+          "meaning": "indoors",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ill",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 21.2745,
+          "pos": "n.",
+          "meaning": "sick",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inch",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 12.3725,
+          "pos": "n.",
+          "meaning": "one twelfth of a foot",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "inn",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 8.3922,
+          "pos": "n.",
+          "meaning": "a small hotel",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "ink",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 7.4902,
+          "pos": "n.",
+          "meaning": "liquid used for writing",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "insect",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 3.1569,
+          "pos": "n.",
+          "meaning": "a six-legged bug",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "igloo",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.2941,
+          "pos": "n.",
+          "meaning": "a place to live made of snow and ice",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        },
+        {
+          "word": "indian",
+          "sound": "i",
+          "spelling": "i",
+          "position": "start",
+          "mean": 0.0,
+          "pos": "n.",
+          "meaning": "Native American",
+          "noun": true,
+          "status": "pending",
+          "image": null
+        }
+      ],
+      "word_count": 16,
+      "notes": [
+        "TYCTR ē is long /ē/ as in eat — reject short-e pictures.",
+        "TYCTR i is short /i/ as in if — reject long-i pictures."
+      ]
+    }
+  ],
+  "phase2_hint": {
+    "next": "midjourney_sort_cards.py",
+    "prompt_pattern": "Children's picture-sort card: a single {word}, centered, simple object on plain background, no text or letters in the image.",
+    "aspect": "1:1"
+  }
+}
