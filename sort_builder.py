@@ -661,19 +661,43 @@ BUILDER_HTML = r"""
   .review-queue label.pick .word-hit {
     flex: 1; cursor: pointer; padding: 0.15rem 0;
   }
+  .drawer {
+    border: 1px solid var(--line); border-radius: 10px; margin-top: 0.75rem;
+    background: rgba(255,255,255,0.55);
+  }
+  .drawer > summary {
+    cursor: pointer; list-style: none; padding: 0.65rem 0.85rem;
+    font-weight: 600; color: var(--muted); font-size: 0.9rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .drawer > summary::-webkit-details-marker { display: none; }
+  .drawer > summary::after { content: "▸"; color: var(--accent); }
+  .drawer[open] > summary::after { content: "▾"; }
+  .drawer-body { padding: 0 0.85rem 0.85rem; }
+  .active-chip {
+    display: inline-block; margin-left: 0.35rem; padding: 0.1rem 0.45rem;
+    border-radius: 999px; background: #e7f3ef; border: 1px solid var(--accent);
+    color: var(--accent); font-size: 0.75rem; font-weight: 600;
+  }
+  .script-editor {
+    width: 100%; min-height: 360px; font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.82rem; line-height: 1.4; margin-top: 0.5rem;
+  }
+  .flow-note { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
 </style>
 </head>
 <body>
 <header>
   <h1>Word Sort Builder</h1>
-  <p>Build a TYCTR picture-sort bank, generate cards, review, export an approved pack, then make the tutor script — in one place.</p>
+  <p>Build a bank → generate cards → review → export pack &amp; edit the tutor script — one continuous flow.</p>
 </header>
 <nav class="steps">
-  <span>1 Bank</span><span>2 Generate</span><span>3 Review</span><span>4 Export</span><span>5 Tutor script</span>
+  <span>1 Bank</span><span>2 Generate</span><span>3 Review</span><span>4 Pack &amp; script</span>
 </nav>
 <main>
   <section class="panel" id="bankPanel">
     <h2>1. Build word bank</h2>
+    <p class="flow-note">Build a bank for a lesson. Generation (step 2) automatically uses the <strong>most recent</strong> bank.</p>
     <div class="modes">
       <button type="button" class="secondary active" data-mode="lesson">Focus lesson</button>
       <button type="button" class="secondary" data-mode="lessons">Lessons list</button>
@@ -710,16 +734,25 @@ BUILDER_HTML = r"""
     </div>
     <div class="row" style="margin-top:0.9rem">
       <button type="button" id="btnBuild">Build bank</button>
-      <button type="button" class="secondary" id="btnRefreshBanks">Refresh list</button>
     </div>
     <p class="status" id="bankStatus"></p>
-    <h3>Saved banks</h3>
-    <div id="bankList" class="muted">Loading…</div>
+    <details class="drawer" id="banksDrawer">
+      <summary>
+        <span>Saved banks <span class="active-chip" id="activeBankChip">—</span></span>
+      </summary>
+      <div class="drawer-body">
+        <p class="muted" style="margin:0 0 0.5rem">Optional: pick an older bank. Default is the newest.</p>
+        <div class="row" style="margin-bottom:0.5rem">
+          <button type="button" class="secondary" id="btnRefreshBanks">Refresh list</button>
+        </div>
+        <div id="bankList" class="muted">Loading…</div>
+      </div>
+    </details>
   </section>
 
   <section class="panel" id="queuePanel">
     <h2>2. Queue card generation</h2>
-    <p class="muted" id="activeBankLabel">Active bank: —</p>
+    <p class="flow-note" id="activeBankLabel">Using newest bank: —</p>
     <label>Sort</label>
     <select id="sortSelect"><option value="">All sorts in bank</option></select>
     <div class="row">
@@ -747,7 +780,7 @@ BUILDER_HTML = r"""
     </div>
     <div id="jobLog" class="log hidden"></div>
     <h3>Will generate</h3>
-    <div id="pendingTable" class="muted">Preview the queue to see words.</div>
+    <div id="pendingTable" class="muted">Queue loads automatically from the active bank.</div>
   </section>
 
   <section class="panel span2" id="reviewPanel">
@@ -786,28 +819,32 @@ BUILDER_HTML = r"""
     </div>
   </section>
 
-  <section class="panel span2">
-    <h2>4–5. Export pack · Tutor script</h2>
-    <p class="links">
-      <a href="#" id="linkPack" class="hidden">Open pack preview</a>
-      <a href="#" id="linkScript" class="hidden">Open tutor script</a>
-    </p>
+  <section class="panel span2" id="packScriptPanel">
+    <h2>4. Pack &amp; tutor script</h2>
+    <p class="flow-note">Export accepted cards into a pack, then edit the tutor script on this same screen.</p>
     <div class="row">
       <div>
-        <label>Export sort (blank = all ready)</label>
+        <label>Sort for pack / script</label>
         <input id="exportSort" type="text" placeholder="e.g. L1_m_vs_s" />
       </div>
       <div>
         <label>&nbsp;</label>
-        <button type="button" id="btnExport">Export approved pack</button>
+        <button type="button" id="btnExportScript">Export pack &amp; build script</button>
       </div>
       <div>
         <label>&nbsp;</label>
-        <button type="button" class="secondary" id="btnScript">Build tutor script</button>
+        <button type="button" class="secondary" id="btnSaveScript">Save script edits</button>
       </div>
     </div>
+    <p class="links" style="margin-top:0.75rem">
+      <a href="#" id="linkPack" class="hidden">Open pack preview</a>
+      <a href="#" id="linkScript" class="hidden">Open script HTML</a>
+    </p>
     <p class="status" id="exportStatus"></p>
-    <h3>Packs</h3>
+    <label for="scriptEditor"><strong>Tutor script</strong> (edit Markdown, then Save)</label>
+    <textarea id="scriptEditor" class="script-editor" placeholder="Export a pack to load the tutor script here…"></textarea>
+    <input type="hidden" id="scriptPackId" value="" />
+    <h3>Recent packs</h3>
     <div id="packList" class="muted">—</div>
   </section>
 </main>
@@ -823,6 +860,7 @@ let selectedWords = new Set();
 let loadingWords = new Set();
 let autoGenStarted = new Set();
 let swipeBound = false;
+let preferNewestBank = true;
 const REVIEW_FILTERS = ["needs_attention", "all", "accepted", "needs_rework", "pending_review", "failed", "skipped"];
 
 function reviewList() {
@@ -1395,18 +1433,51 @@ document.getElementById("btnRegenSelected").onclick = async () => {
   }
 };
 
+function setActiveBankUi(bank) {
+  activeBank = bank;
+  const name = bank?.name || "—";
+  const label = document.getElementById("activeBankLabel");
+  if (label) label.textContent = `Using newest bank: ${name}`;
+  const chip = document.getElementById("activeBankChip");
+  if (chip) chip.textContent = name;
+  fillSorts(bank);
+}
+
+async function previewQueue() {
+  const status = document.getElementById("genStatus");
+  try {
+    const sort = document.getElementById("sortSelect").value || null;
+    const limit = Number(document.getElementById("limit").value || 0) || null;
+    const data = await api(`/api/generate/preview?sort=${encodeURIComponent(sort || "")}&limit=${limit || ""}`);
+    renderPending(data);
+    if (status) {
+      status.textContent = `Queue ready: ${data.will_generate} will generate.`;
+      status.className = "status ok";
+    }
+  } catch (e) {
+    if (status) {
+      status.textContent = e.message;
+      status.className = "status err";
+    }
+  }
+}
+
 function renderBanks(banks) {
   const el = document.getElementById("bankList");
   if (!banks.length) { el.textContent = "No banks yet."; return; }
   el.innerHTML = `<table><thead><tr><th>File</th><th>Mode</th><th>Sorts</th><th></th></tr></thead><tbody>` +
-    banks.map(b => `<tr>
-      <td><code>${b.name}</code></td>
+    banks.map((b, i) => `<tr>
+      <td><code>${b.name}</code>${i === 0 ? ' <span class="active-chip">newest</span>' : ""}</td>
       <td>${b.mode || "—"} ${b.focus_lesson != null ? "(L"+b.focus_lesson+")" : ""}</td>
       <td>${b.sort_count ?? "—"}</td>
       <td><button type="button" class="secondary" data-path="${b.path}">Use</button></td>
     </tr>`).join("") + `</tbody></table>`;
   el.querySelectorAll("button[data-path]").forEach(btn => {
-    btn.onclick = () => selectBank(btn.dataset.path);
+    btn.onclick = async () => {
+      preferNewestBank = false;
+      await selectBank(btn.dataset.path);
+      await previewQueue();
+    };
   });
 }
 
@@ -1416,7 +1487,7 @@ function fillSorts(summary) {
   const sorts = summary?.sorts || [];
   sel.innerHTML = `<option value="">All sorts in bank</option>` +
     sorts.map(s => `<option value="${s.id}">${s.id} (${s.word_count} words) [${(s.headers||[]).join(", ")}]</option>`).join("");
-  if (sorts[0]) exportSort.value = sorts[0].id;
+  if (sorts[0] && exportSort) exportSort.value = sorts[0].id;
 }
 
 async function selectBank(path) {
@@ -1425,26 +1496,25 @@ async function selectBank(path) {
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ path }),
   });
-  activeBank = data.bank;
-  document.getElementById("activeBankLabel").textContent =
-    `Active bank: ${activeBank.name}`;
-  fillSorts(activeBank);
+  setActiveBankUi(data.bank);
   document.getElementById("bankStatus").textContent =
-    `Using ${activeBank.name} · ${activeBank.sort_count} sort(s)`;
+    `Using ${data.bank.name} · ${data.bank.sort_count} sort(s)`;
   document.getElementById("bankStatus").className = "status ok";
   refreshReview().catch(() => {});
 }
 
 async function refreshBanks() {
   const data = await api("/api/banks");
-  renderBanks(data.banks || []);
-  if (data.active) {
-    activeBank = data.active;
-    document.getElementById("activeBankLabel").textContent =
-      `Active bank: ${activeBank.name}`;
-    fillSorts(activeBank);
+  const banks = data.banks || [];
+  renderBanks(banks);
+  // Prefer newest bank for the generate queue unless user picked an older one
+  if (preferNewestBank && banks.length && banks[0].path) {
+    await selectBank(banks[0].path);
+  } else if (data.active) {
+    setActiveBankUi(data.active);
   }
   renderPacks(data.packs || []);
+  await previewQueue();
 }
 
 function renderPacks(packs) {
@@ -1457,14 +1527,42 @@ function renderPacks(packs) {
       ${p.has_script ? " · script ready" : ""}
       · <a href="/packs/${encodeURIComponent(p.id)}/index.html" target="_blank">pack</a>
       ${p.has_script ? ` · <a href="/packs/${encodeURIComponent(p.id)}/tutor_script.html" target="_blank">script</a>` : ""}
+      · <button type="button" class="secondary" data-load-script="${p.id}" style="padding:0.2rem 0.5rem;font-size:0.75rem">Edit script</button>
     </div>`;
   }).join("");
+  el.querySelectorAll("button[data-load-script]").forEach(btn => {
+    btn.onclick = () => loadScriptIntoEditor(btn.dataset.loadScript);
+  });
 }
 
-document.getElementById("btnRefreshBanks").onclick = () => refreshBanks().catch(e => {
-  document.getElementById("bankStatus").textContent = e.message;
-  document.getElementById("bankStatus").className = "status err";
-});
+async function loadScriptIntoEditor(packId) {
+  const status = document.getElementById("exportStatus");
+  try {
+    const data = await api(`/api/tutor-script?pack_id=${encodeURIComponent(packId)}`);
+    document.getElementById("scriptEditor").value = data.markdown || "";
+    document.getElementById("scriptPackId").value = data.pack_id || packId;
+    const link = document.getElementById("linkScript");
+    link.href = data.script_url;
+    link.classList.remove("hidden");
+    if (status) {
+      status.textContent = `Loaded script for ${data.pack_id}`;
+      status.className = "status ok";
+    }
+  } catch (e) {
+    if (status) {
+      status.textContent = e.message;
+      status.className = "status err";
+    }
+  }
+}
+
+document.getElementById("btnRefreshBanks").onclick = () => {
+  preferNewestBank = true;
+  refreshBanks().catch(e => {
+    document.getElementById("bankStatus").textContent = e.message;
+    document.getElementById("bankStatus").className = "status err";
+  });
+};
 
 document.getElementById("btnBuild").onclick = async () => {
   const status = document.getElementById("bankStatus");
@@ -1485,14 +1583,13 @@ document.getElementById("btnBuild").onclick = async () => {
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify(body),
     });
-    status.textContent = `Wrote ${data.bank.name} · ${data.bank.sort_count} sort(s)`;
+    preferNewestBank = true;
+    status.textContent = `Wrote ${data.bank.name} · ${data.bank.sort_count} sort(s) — now active for generation`;
     status.className = "status ok";
-    activeBank = data.bank;
-    fillSorts(activeBank);
-    document.getElementById("activeBankLabel").textContent =
-      `Active bank: ${activeBank.name}`;
+    setActiveBankUi(data.bank);
     await refreshBanks();
     await refreshReview();
+    document.getElementById("queuePanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (e) {
     status.textContent = e.message;
     status.className = "status err";
@@ -1517,20 +1614,9 @@ function renderPending(preview) {
     </tr>`).join("") + `</tbody></table>`;
 }
 
-document.getElementById("btnPreview").onclick = async () => {
-  const status = document.getElementById("genStatus");
-  try {
-    const sort = document.getElementById("sortSelect").value || null;
-    const limit = Number(document.getElementById("limit").value || 0) || null;
-    const data = await api(`/api/generate/preview?sort=${encodeURIComponent(sort || "")}&limit=${limit || ""}`);
-    renderPending(data);
-    status.textContent = `Queue ready: ${data.will_generate} will generate.`;
-    status.className = "status ok";
-  } catch (e) {
-    status.textContent = e.message;
-    status.className = "status err";
-  }
-};
+document.getElementById("btnPreview").onclick = () => previewQueue();
+document.getElementById("sortSelect").onchange = () => previewQueue();
+document.getElementById("limit").onchange = () => previewQueue();
 
 document.getElementById("btnGenerate").onclick = async () => {
   const status = document.getElementById("genStatus");
@@ -1547,6 +1633,7 @@ document.getElementById("btnGenerate").onclick = async () => {
       etaEl: "genEta",
       disableBtn: btn,
     });
+    await previewQueue();
   } catch (e) {
     status.textContent = e.message;
     status.className = "status err";
@@ -1554,38 +1641,60 @@ document.getElementById("btnGenerate").onclick = async () => {
   }
 };
 
-document.getElementById("btnExport").onclick = async () => {
+document.getElementById("btnExportScript").onclick = async () => {
   const status = document.getElementById("exportStatus");
-  status.textContent = "Exporting accepted pack…";
+  status.textContent = "Exporting pack & building tutor script…";
   status.className = "status";
+  const sort = document.getElementById("exportSort").value.trim() || null;
   try {
-    const data = await api("/api/export", {
+    const exported = await api("/api/export", {
       method: "POST",
       headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ sort: document.getElementById("exportSort").value.trim() || null }),
+      body: JSON.stringify({ sort }),
     });
-    status.textContent = data.message;
+    const linkPack = document.getElementById("linkPack");
+    linkPack.href = exported.preview_url;
+    linkPack.classList.remove("hidden");
+
+    const scripted = await api("/api/tutor-script", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ pack_id: exported.pack_id, sort }),
+    });
+    document.getElementById("scriptEditor").value = scripted.markdown || "";
+    document.getElementById("scriptPackId").value = scripted.pack_id || exported.pack_id;
+    const linkScript = document.getElementById("linkScript");
+    linkScript.href = scripted.script_url;
+    linkScript.classList.remove("hidden");
+
+    status.textContent = `${exported.message} · ${scripted.message}`;
     status.className = "status ok";
-    const link = document.getElementById("linkPack");
-    link.href = data.preview_url;
-    link.classList.remove("hidden");
     await refreshBanks();
+    document.getElementById("scriptEditor")?.scrollIntoView({ behavior: "smooth", block: "center" });
   } catch (e) {
     status.textContent = e.message;
     status.className = "status err";
   }
 };
 
-document.getElementById("btnScript").onclick = async () => {
+document.getElementById("btnSaveScript").onclick = async () => {
   const status = document.getElementById("exportStatus");
-  status.textContent = "Building tutor script…";
+  const packId = document.getElementById("scriptPackId").value.trim();
+  const markdown = document.getElementById("scriptEditor").value;
+  if (!packId) {
+    status.textContent = "Export a pack first (or load a script from Recent packs).";
+    status.className = "status err";
+    return;
+  }
+  status.textContent = "Saving script edits…";
   status.className = "status";
   try {
     const data = await api("/api/tutor-script", {
-      method: "POST",
+      method: "PUT",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
-        pack_id: null,
+        pack_id: packId,
+        markdown,
         sort: document.getElementById("exportSort").value.trim() || null,
       }),
     });
@@ -1823,71 +1932,139 @@ def api_export():
         return jsonify({"error": str(e)}), 400
 
 
-@app.post("/api/tutor-script")
-def api_tutor_script():
-    body = request.get_json(silent=True) or {}
-    pack_id = body.get("pack_id")
-    sort_id = body.get("sort") or None
+def resolve_pack_dir(pack_id: str | None, sort_id: str | None) -> Path:
     packs_root = WORKSPACE / "packs"
     if pack_id:
         pack_dir = packs_root / pack_id
-    else:
-        # Prefer newest pack that has approved.json
-        candidates = [
-            d for d in packs_root.iterdir()
-            if d.is_dir() and (d / "approved.json").exists()
-        ] if packs_root.exists() else []
-        if not candidates:
-            return jsonify({"error": "No packs found. Export first."}), 400
-        # Prefer pack matching sort name
-        pack_dir = None
-        if sort_id:
-            slug = osc.slug(sort_id)
-            for d in sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True):
-                if slug in d.name:
-                    pack_dir = d
-                    break
-        if pack_dir is None:
-            pack_dir = max(candidates, key=lambda p: p.stat().st_mtime)
+        if not (pack_dir / "approved.json").exists():
+            raise ValueError(f"Pack not found: {pack_id}")
+        return pack_dir
 
+    candidates = [
+        d for d in packs_root.iterdir()
+        if d.is_dir() and (d / "approved.json").exists()
+    ] if packs_root.exists() else []
+    if not candidates:
+        raise ValueError("No packs found. Export first.")
+
+    if sort_id:
+        slug = osc.slug(sort_id)
+        for d in sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True):
+            if slug in d.name:
+                return d
+    return max(candidates, key=lambda p: p.stat().st_mtime)
+
+
+def enrich_columns_from_bank(pack: dict, columns: list[dict]) -> None:
+    bank_name = pack.get("bank")
+    if not bank_name:
+        return
+    bank_path = HERE / bank_name
+    if not bank_path.exists():
+        return
+    bank = json.loads(bank_path.read_text(encoding="utf-8"))
+    by_sym = {
+        s.get("symbol"): s
+        for s in (bank.get("selected_spellings") or bank.get("new_spellings") or [])
+    }
+    for col in columns:
+        meta = by_sym.get(col["spelling"]) or {}
+        if meta.get("pronounced"):
+            col["pronounced"] = meta["pronounced"]
+
+
+def write_tutor_script(
+    pack_dir: Path,
+    sort_id: str | None = None,
+    markdown: str | None = None,
+) -> dict:
     approved_path = pack_dir / "approved.json"
     if not approved_path.exists():
-        return jsonify({"error": f"Missing {approved_path}"}), 400
+        raise ValueError(f"Missing {approved_path}")
 
     pack = json.loads(approved_path.read_text(encoding="utf-8"))
     cards_by_word = bts.card_lookup(pack)
     sort = bts.pick_sort(pack, sort_id)
     columns = bts.column_plan(sort, cards_by_word)
+    enrich_columns_from_bank(pack, columns)
 
-    bank_name = pack.get("bank")
-    if bank_name:
-        bank_path = HERE / bank_name
-        if bank_path.exists():
-            bank = json.loads(bank_path.read_text(encoding="utf-8"))
-            by_sym = {
-                s.get("symbol"): s
-                for s in (bank.get("selected_spellings") or bank.get("new_spellings") or [])
-            }
-            for col in columns:
-                meta = by_sym.get(col["spelling"]) or {}
-                if meta.get("pronounced"):
-                    col["pronounced"] = meta["pronounced"]
-
-    md = bts.build_markdown(pack, sort, columns, cards_by_word)
     md_path = pack_dir / "tutor_script.md"
     html_path = pack_dir / "tutor_script.html"
+
+    if markdown is None:
+        md = bts.build_markdown(pack, sort, columns, cards_by_word)
+    else:
+        md = markdown
+
     md_path.write_text(md, encoding="utf-8")
     html_path.write_text(
         bts.markdown_to_simple_html(md, pack, sort, columns, cards_by_word),
         encoding="utf-8",
     )
-    return jsonify(
-        {
-            "pack_id": pack_dir.name,
-            "script_url": f"/packs/{pack_dir.name}/tutor_script.html",
-            "message": f"Wrote tutor script for {sort.get('id')} in {pack_dir.name}",
-        }
-    )
+    return {
+        "pack_id": pack_dir.name,
+        "markdown": md,
+        "script_url": f"/packs/{pack_dir.name}/tutor_script.html",
+        "sort_id": sort.get("id"),
+        "message": f"Wrote tutor script for {sort.get('id')} in {pack_dir.name}",
+    }
+
+
+@app.get("/api/tutor-script")
+def api_tutor_script_get():
+    pack_id = request.args.get("pack_id") or None
+    sort_id = request.args.get("sort") or None
+    try:
+        pack_dir = resolve_pack_dir(pack_id, sort_id)
+        md_path = pack_dir / "tutor_script.md"
+        if not md_path.exists():
+            # Generate once so the editor can open older packs
+            result = write_tutor_script(pack_dir, sort_id=sort_id)
+            return jsonify(result)
+        pack = json.loads((pack_dir / "approved.json").read_text(encoding="utf-8"))
+        sort = bts.pick_sort(pack, sort_id)
+        return jsonify(
+            {
+                "pack_id": pack_dir.name,
+                "markdown": md_path.read_text(encoding="utf-8"),
+                "script_url": f"/packs/{pack_dir.name}/tutor_script.html",
+                "sort_id": sort.get("id"),
+                "message": f"Loaded script for {pack_dir.name}",
+            }
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.put("/api/tutor-script")
+def api_tutor_script_put():
+    body = request.get_json(silent=True) or {}
+    pack_id = body.get("pack_id")
+    markdown = body.get("markdown")
+    sort_id = body.get("sort") or None
+    if not pack_id:
+        return jsonify({"error": "pack_id required"}), 400
+    if markdown is None:
+        return jsonify({"error": "markdown required"}), 400
+    try:
+        pack_dir = resolve_pack_dir(pack_id, sort_id)
+        result = write_tutor_script(pack_dir, sort_id=sort_id, markdown=markdown)
+        result["message"] = f"Saved script edits for {result['pack_id']}"
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.post("/api/tutor-script")
+def api_tutor_script():
+    body = request.get_json(silent=True) or {}
+    pack_id = body.get("pack_id")
+    sort_id = body.get("sort") or None
+    try:
+        pack_dir = resolve_pack_dir(pack_id, sort_id)
+        return jsonify(write_tutor_script(pack_dir, sort_id=sort_id))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
 @app.get("/packs/<path:subpath>")
