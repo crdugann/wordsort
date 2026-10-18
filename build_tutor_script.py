@@ -4,6 +4,10 @@ build_tutor_script.py — Phase 4 of Word Sort Builder TYCTR
 ==========================================================
 Builds a 3-day closed picture-sort tutor script from an approved pack.
 
+Pedagogy follows Words Their Way gradual release: Day 1 teacher-directed
+closed sort (dense script) → Days 2–3 less tutor talk, more student
+agency, Check & Reflect, and Day 3 automaticity measures.
+
 Only words/images listed in approved.json are used.
 
   python build_tutor_script.py --pack packs/l1_m_vs_s_approved
@@ -226,18 +230,58 @@ def build_markdown(
     a("")
     a("\n".join(materials_lines))
     a("")
-    a("**Setup:** Place the two header pictures at the top of the workspace with the letter cards "
-      f"**{c0['spelling']}** and **{c1['spelling']}**. Shuffle the remaining picture cards face down.")
+    letter_headers = " and ".join(f"**{c['spelling']}**" for c in columns)
+    header_setup = "  |  ".join(
+        f"**{c['header_word']}** + **{c['spelling']}**" for c in columns
+    )
+
+    a(
+        f"**Setup:** Place the header pictures at the top of the workspace with the letter cards "
+        f"{letter_headers}. Shuffle the remaining picture cards face down."
+    )
     a("")
     a("---")
     a("")
     a("## Word meanings (quick check — say the name, don't spell yet)")
     a("")
+    a(
+        "WTW: use words/pictures students can name. For English learners, spend extra time "
+        "naming pictures before any sorting."
+    )
+    a("")
     a(meaning_block)
     a("")
     a("---")
     a("")
-    a("## Framing (say this every day)")
+    a("## Gradual release across days (WTW continuum)")
+    a("")
+    a("| Day | Support level | Tutor talk | Student job | What you measure |")
+    a("|---|---|---|---|---|")
+    a(
+        "| **1** | Teacher-directed **closed** sort | Dense script + think-alouds; "
+        "correct immediately on first shared sort | Learn categories; finish sort; one re-sort | "
+        "Accuracy with scaffolds; can name headers |"
+    )
+    a(
+        "| **2** | Guided → student-centered closed | Tiny model; prompts only; "
+        "on re-sorts guide self-correction | Blind sort; partner/solo re-sort; more student talk | "
+        "Fewer prompts; self-finds misfits |"
+    )
+    a(
+        "| **3** | Student-centered closed + light assess | Facilitator questions, almost no demo | "
+        "Independent sort; teach-back; timed sort | Accuracy without help; automaticity |"
+    )
+    a("")
+    a(
+        "Lesson skeleton every day: **Demonstrate & Sort → Check & Reflect → Extend**. "
+        "Stay **closed** (headers given) for a new TYCTR feature — not Guess My Category / open sort yet."
+    )
+    a("")
+    a("---")
+    a("")
+    a("## Framing")
+    a("")
+    a("### Day 1 — full framing (say all three)")
     a("")
     a("| Piece | Tutor language |")
     a("|---|---|")
@@ -254,27 +298,37 @@ def build_markdown(
         "new words — and we still keep the meaning of the picture in mind. |"
     )
     a("")
+    a("### Days 2–3 — short framing (10–15 sec)")
+    a("")
+    a(
+        f"*“Same closed sort: /{c0['spelling']}/ like **{c0['header_word']}**, "
+        f"/{c1['spelling']}/ like **{c1['header_word']}**. "
+        f"Name it → first sound → header. You do more of the talking today.”*"
+    )
+    a("")
     a("---")
     a("")
     a("## Day 1 — Introduce the closed picture sort (~15–20 min)")
     a("")
-    a("**Goal:** Students learn the categories and how to sort by **initial sound**.")
-    a("")
-    a("### Prep (1–2 min)")
-    a(f"1. Show each picture quickly. Student names it. Clarify meanings as needed (see list above).")
-    a(f"2. Set headers: **{c0['header_word']}** + **{c0['spelling']}**  |  "
-      f"**{c1['header_word']}** + **{c1['spelling']}**.")
     a(
-        f"3. Tutor: *“This picture is **{c0['header_word']}**. "
+        "**Goal:** Students learn the categories and how to sort by **initial sound** "
+        "(teacher-directed closed sort — densest tutor talk)."
+    )
+    a("")
+    a("### Demonstrate & Sort")
+    a("")
+    a("#### Prep / review the pictures (1–2 min)")
+    a("1. Show each picture quickly. Student names it. Clarify meanings as needed (list above).")
+    a(f"2. Set headers: {header_setup}.")
+    a(
+        f"3. Tutor establishes categories: *“This picture is **{c0['header_word']}**. "
         f"**{c0['header_word']}** starts with /{c0['pronounced']}/ — that goes with **{c0['spelling']}**. "
         f"This picture is **{c1['header_word']}**. "
         f"**{c1['header_word']}** starts with /{c1['pronounced']}/ — that goes with **{c1['spelling']}**.”*"
     )
     a("")
-    a("### I Do, You Watch")
-    a(
-        f"Tutor thinks aloud with 2–3 cards (student watches; does not place yet):"
-    )
+    a("#### I Do, You Watch — model 2–3 cards")
+    a("Student watches; does not place yet. Stretch the first sound (say it as you lay it).")
     a("")
     a(
         f"1. Hold **{d0}**: *“I say **{d0}**… /{c0['pronounced']}/… **{d0}**. "
@@ -291,10 +345,9 @@ def build_markdown(
             f"Place under /{c0['spelling']}/."
         )
     a("")
-    a("### I Do, You Help")
+    a("#### I Do, You Help — turn the task over (correct immediately if wrong)")
     a(
-        f"Tutor holds **{help_word[0]}**. Student says the name and first sound; tutor confirms; "
-        f"student places it."
+        f"Tutor holds **{help_word[0]}**. Student says the name and first sound; student places it."
     )
     a("")
     a(
@@ -308,89 +361,140 @@ def build_markdown(
         f"- Tutor: *“Which header? **{c0['header_word']}** or **{c1['header_word']}**?”* "
         f"→ place under /{help_word[1]['spelling']}/."
     )
-    a("- If wrong: *“Say it again slowly. Stretch the first sound. Try once more.”* Do not skip the re-say.")
+    a(
+        "- If wrong on this **first** shared sort: correct now — "
+        "*“Say it again slowly. Stretch the first sound. Try once more.”* Do not skip the re-say."
+    )
     a("")
-    a("### You Do, I Help")
+    a("#### You Do, I Help — finish the sort")
     a("Student sorts the remaining picture cards. Tutor prompts only as needed:")
     a("")
     a("- *“Say it.”* → *“First sound?”* → *“Which header?”*")
-    a("- After all cards are down: check each column together top to bottom.")
+    a("- After all cards are down: check each column together top to bottom (name each picture).")
     a(
-        f"- Big idea: *“Pictures under **{c0['spelling']}** all start with /{c0['pronounced']}/ "
-        f"like **{c0['header_word']}**. Pictures under **{c1['spelling']}** all start with "
-        f"/{c1['pronounced']}/ like **{c1['header_word']}**.”*"
+        f"- Big idea (tutor may still lead): *“Pictures under **{c0['spelling']}** all start with "
+        f"/{c0['pronounced']}/ like **{c0['header_word']}**. Pictures under **{c1['spelling']}** "
+        f"all start with /{c1['pronounced']}/ like **{c1['header_word']}**.”*"
     )
     a("")
     a("**Remaining cards for this step:**")
     for w, c in practice_pool:
         a(f"- **{w}** → /{c['spelling']}/")
     a("")
-    a("### You Do, I Watch")
-    a("Mix the non-header cards. Student re-sorts independently. Tutor watches; notes errors for re-teach.")
-    a("End: student points to each column and states the big idea in their own words.")
+    a("### Check & Reflect")
+    a("Mix the non-header cards. Student re-sorts once under supervision.")
+    a("")
+    a("- On this **second** pass: if something looks off, do **not** grab the card first. Ask:")
+    a("  - *“Why did you put that there?”*")
+    a("  - *“I see one picture in this column that doesn’t fit — can you find it?”*")
+    a(
+        f"- Then: *“What do you notice about the pictures under **{c0['spelling']}**? "
+        f"Under **{c1['spelling']}**?”*"
+    )
+    a("- End: student points to each column and states the big idea in their own words.")
+    a("")
+    a("### Extend")
+    a("Student keeps the set for seat/partner practice later (same headers). No new words.")
     a("")
     a("---")
     a("")
-    a("## Day 2 — Re-sort + blind sort (~15 min)")
+    a("## Day 2 — Less tutor talk, more student talk (~15 min)")
     a("")
-    a("**Goal:** Fluency with the same categories; strengthen sound → letter link.")
-    a("")
-    a("### Framing")
-    a("Repeat Declarative / Procedural / Conditional (short version).")
-    a("")
-    a("### I Do, You Watch (30–60 sec)")
     a(
-        f"Quick model one card only: **{d0}** under **{c0['header_word']}** / **{c0['spelling']}** "
-        f"with a short think-aloud."
+        "**Goal:** Fluency with the same categories; strengthen sound → letter link; "
+        "shift talk from tutor to student."
     )
     a("")
-    a("### I Do, You Help")
-    a("Student re-sorts the full set with light prompts (*Say it → first sound → header*).")
+    a("### Framing")
+    a("Use the **short** Day 2–3 framing above.")
     a("")
-    a("### You Do, I Help — Blind picture sort")
-    a("Headers stay visible. Tutor holds a card so the student cannot see it, says the word, "
-      "student points to the correct header, then places the card.")
+    a("### Demonstrate & Sort")
+    a("")
+    a("#### I Do, You Watch (30–60 sec only)")
+    a(
+        f"One quick model: **{d0}** under **{c0['header_word']}** / **{c0['spelling']}** "
+        f"with a short think-aloud — then stop talking."
+    )
+    a("")
+    a("#### You Do, I Help — student re-sort (light prompts)")
+    a(
+        "Student re-sorts the full set. Tutor uses only: *Say it → first sound → header*. "
+        "Prefer student explanations over tutor monologue."
+    )
+    a("")
+    a("#### You Do, I Help — Blind picture sort")
+    a(
+        "Headers stay visible. Tutor holds a card so the student cannot see it, says the word, "
+        "student points to the correct header, then places the card."
+    )
     a("")
     a("Blind set (from this pack only):")
     for w in day2_blind:
         col = next(c for c in columns if w in c["all_words"])
         a(f"- Tutor says **{w}** → student points to /{col['spelling']}/")
     a("")
-    a("### You Do, I Watch")
-    a("Student does a timed or untimed re-sort alone. Check columns. Correct any mix-ups with a re-say.")
+    a("### Check & Reflect (student talk)")
+    a("Student does an untimed re-sort alone. Tutor watches.")
     a("")
+    a("Use open prompts (not right/wrong IRE):")
+    a("- *“What do you notice about these pictures now?”*")
+    a("- *“How are they alike in this column? How are they different from that one?”*")
+    a("- *“Why did you put this one here?”*")
+    a("- *“Who can add to that?”* / *“Do you agree? Why or why not?”*")
     a(
-        f"**Optional write link:** Student writes the letter **{c0['spelling']}** or **{c1['spelling']}** "
+        "- If a misfit remains: *“Find the one that doesn’t fit”* — student fixes it, then re-says "
+        "the first sound."
+    )
+    a("")
+    a("### Extend")
+    a(
+        f"**Write link:** Student writes the letter **{c0['spelling']}** or **{c1['spelling']}** "
         "next to 2–3 pictures after sorting (sound → letter)."
     )
+    a("Optional: partner sort with the same set — partners must agree and say why.")
     a("")
     a("---")
     a("")
-    a("## Day 3 — Check, reflect, extend (~15 min)")
+    a("## Day 3 — Agency + automaticity (~15 min)")
     a("")
-    a("**Goal:** Independent accuracy + reflect on the big idea; light extension.")
+    a(
+        "**Goal:** Independent accuracy, student-owned big idea, and a light automaticity check "
+        "(student-centered closed sort)."
+    )
     a("")
     a("### Framing")
-    a("Short Declarative / Procedural / Conditional.")
+    a("Short Day 2–3 framing only. No long Declarative/Procedural/Conditional.")
     a("")
-    a("### You Do, I Watch — Full independent sort")
-    a("Student sorts the full approved set with headers. Tutor observes; intervenes only for stuck moments.")
+    a("### Demonstrate & Sort — You Do, I Watch")
+    a(
+        "Student sorts the full approved set with headers. Tutor observes; intervenes only if stuck. "
+        "**No demo** unless the student cannot start."
+    )
     a("")
     a("### Check & Reflect")
     a("- Student reads each column aloud (picture names).")
     a(
-        f"- Tutor: *“How are the **{c0['spelling']}** pictures the same? "
+        f"- Tutor (facilitator, not teller): *“How are the **{c0['spelling']}** pictures the same? "
         f"How are the **{c1['spelling']}** pictures the same?”*"
     )
     a(
-        f"- Target answer: they share the same **beginning sound** "
+        f"- Target answer (student says it): same **beginning sound** "
         f"(/{c0['pronounced']}/ vs /{c1['pronounced']}/)."
     )
-    a("- If an error remains: pull that card, re-say, re-place, then restate the big idea.")
+    a("- *“What did we learn from this sort to be a better reader or speller?”*")
+    a("- If an error remains: student finds it, re-says, re-places, restates the big idea.")
+    a("")
+    a("### Automaticity check (measure)")
+    a("1. Mix the cards. Student re-sorts as quickly as they can while still naming each picture.")
+    a("2. Tutor tallies quietly:")
+    a("   - time to finish (optional)")
+    a("   - number of tutor prompts needed (goal: **0–1**)")
+    a("   - any misfits after self-check")
+    a("3. Student teach-back (60 sec, no tutor stems): headers → one example each → big idea.")
     a("")
     a("### Extend (pick one)")
     a(
-        f"1. **Sound hunt:** Student finds one more classroom object that starts like "
+        f"1. **Sound hunt:** Find one classroom object that starts like "
         f"**{c0['header_word']}** or **{c1['header_word']}** (say it; don’t invent new pack cards)."
     )
     a(
@@ -398,8 +502,8 @@ def build_markdown(
         f"**{c1['spelling']}** and write the letter three times while saying the sound."
     )
     a(
-        "3. **Teach-back:** Student teaches the sort back to the tutor in 60 seconds "
-        "(headers → one example each → big idea)."
+        "3. **Best-bet transfer:** Tutor says a new spoken word (not a pack card). Student points to "
+        f"/{c0['spelling']}/ or /{c1['spelling']}/ and explains the best bet."
     )
     a("")
     a("---")
@@ -416,9 +520,12 @@ def build_markdown(
     a("")
     a("- [ ] Every picture named in this script appears in `approved.json` / the materials list")
     a("- [ ] No extra words were added from memory or the larger word bank")
-    a("- [ ] Headers were given first (closed sort — not Guess My Category)")
-    a("- [ ] Student said the picture name and first sound before placing")
-    a("- [ ] Columns were checked; big idea named aloud")
+    a("- [ ] Headers were given first (closed sort — not Guess My Category / open sort)")
+    a("- [ ] Day 1: tutor modeled with think-alouds; first shared sort errors corrected immediately")
+    a("- [ ] Day 2–3: less tutor talk; student justified placements; self-found misfits on re-sorts")
+    a("- [ ] Student said the picture name and first sound before placing (*say it / lay it*)")
+    a("- [ ] Check & Reflect used open questions; big idea named by the **student**")
+    a("- [ ] Day 3 automaticity: prompts tallied and/or teach-back completed")
     a("")
     a(f"_Pack cards used: {len(all_words)} · Sort ready_for_phase4: {bool(sort.get('ready_for_phase4'))}_")
     a("")

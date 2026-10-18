@@ -7,7 +7,7 @@ Online + local tool for **closed teacher-directed picture sorts** aligned to TYC
 1. **Build a word bank** from TYCTR GPCs + Biemiller (`Rating.Mean`)
 2. **Generate / refine** OpenAI picture-sort cards (approve, reject, rework)
 3. **Export** an approved pack
-4. **Build a tutor script** (3-day closed picture sort) from that pack only
+4. **Build a tutor script** (3-day closed picture sort, WTW gradual release) from that pack only
 
 ## Run locally
 
@@ -48,6 +48,18 @@ gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 1 --threads 8 --timeout 180
 ### Railway / Fly / other
 
 Same idea: Python 3.12, `pip install -r requirements.txt`, run the gunicorn command, set `OPENAI_API_KEY` + `APP_PASSWORD`, mount a volume at `DATA_DIR`.
+
+### Cloudflare
+
+This app is a **long-running Python Flask** service (OpenAI image jobs + persistent `cards/` / `packs/`). It is **not** a fit for Cloudflare Pages or a plain Worker.
+
+**Practical options:**
+
+1. **Keep Render (or any host) + put Cloudflare in front** — point a Cloudflare domain/DNS at the Render URL (orange-cloud proxy). Easiest “through Cloudflare.”
+2. **Cloudflare Tunnel (`cloudflared`)** — run the builder on a machine/VPS (or keep Render), install `cloudflared`, create a tunnel to `http://127.0.0.1:5055` (or the host port), map a hostname in Zero Trust. Good for private tutor access without opening firewall ports.
+3. **Cloudflare Containers** — package the app as a Docker image and run it on Cloudflare’s container platform if your account has that enabled; still need persistent storage for cards/packs and the same env vars (`OPENAI_API_KEY`, `APP_PASSWORD`, `DATA_DIR`).
+
+Do **not** deploy this repo as a static Pages site — card generation and review need the Python server.
 
 ## Security
 
