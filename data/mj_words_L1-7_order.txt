@@ -1,0 +1,52 @@
+# Word order for Midjourney L1-7 (start-position picture nouns)
+# Generate Discord batches in THIS order, then rename_mj_downloads.py --by mtime
+
+# L1 /m/ as in man
+man
+money
+may
+mother
+minute
+mine
+moment
+ma
+
+# L1 /s/ as in sat
+son
+second
+side
+sister
+sound
+sign
+song
+seat
+
+# L3 /a/ as in and
+air
+army
+accident
+area
+arm
+angry
+aunt
+address
+
+# L5 /ē/ as in eat
+eye
+earth
+evil
+enemy
+ear
+example
+express
+exercise
+
+# L7 /t/ as in cat
+time
+talk
+tonight
+turn
+team
+table
+test
+tea
