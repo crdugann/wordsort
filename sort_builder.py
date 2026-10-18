@@ -2255,12 +2255,22 @@ def builder_index():
 
 @app.get("/health")
 def health():
+    git_commit = (
+        (os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("GIT_COMMIT") or "").strip()
+        or None
+    )
+    if git_commit and len(git_commit) > 7:
+        git_commit = git_commit[:7]
+    scope_pdf = (HERE / "data" / "tyctr_scope_sequence.pdf").exists()
     return jsonify({
         "ok": True,
         "app": "word-sort-builder",
         "bank": STATE["bank_path"].name if STATE["bank_path"].exists() else None,
         "has_openai_key": bool(os.environ.get("OPENAI_API_KEY")),
         "image_create": feature_image_create(),
+        "git_commit": git_commit,
+        "scope_pdf": scope_pdf,
+        "build": "scope-pdf-v1",
     })
 
 
