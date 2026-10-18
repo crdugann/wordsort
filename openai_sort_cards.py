@@ -46,7 +46,8 @@ except ImportError:
 DEFAULT_STYLE = (
     "storybook modern illustration, quiet mood, clean forms, "
     "single isolated object only, no scene, no setting, no extra props, "
-    "plain empty background, no text, no letters, no watermark, no logo"
+    "pure white background, no gradients, no shadows on background, "
+    "print-friendly sparse ink, no text, no letters, no watermark, no logo"
 )
 
 DEFAULT_MODEL = "gpt-image-1"
@@ -154,14 +155,16 @@ def build_prompt(
 
 
 # Midjourney-friendly base style (paste into web/Discord; no OpenAI call)
-# Prefer bare object cards — avoid storybook "scenes" with extra props/setting.
+# Prefer bare object on white — saves color ink when printing cards.
 DEFAULT_MJ_STYLE = (
     "storybook modern illustration, quiet mood, clean forms, "
     "single isolated object only, no scene, no setting, no extra props, "
-    "no people unless the word is a person, plain empty background, "
+    "no people unless the word is a person, "
+    "pure white background, blank white page, no colored backdrop, "
+    "no gradients, no ground shadow wash, print-friendly sparse ink, "
     "no text, no letters, no watermark, no logo"
 )
-DEFAULT_MJ_PARAMS = "--no background --ar 1:1 --stylize 80"
+DEFAULT_MJ_PARAMS = "--no background --ar 1:1 --stylize 50"
 # Midjourney plan caps for one permutation paste (Fast/Turbo only)
 MJ_PERM_CHUNK = 4  # safe default for Basic; Standard=10, Pro/Mega=40
 
