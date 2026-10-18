@@ -49,6 +49,7 @@ def _workspace_root() -> Path:
 
 WORKSPACE = _workspace_root()
 DEFAULT_CARDS = WORKSPACE / "cards"
+SELECTIONS_DIR = WORKSPACE / "selections"
 
 app = Flask(__name__)
 
@@ -63,6 +64,120 @@ STATE = {
     "biemiller_csv": bsb.DEFAULT_BIEMILLER,
     "per_column": 8,
 }
+
+
+def feature_image_create() -> bool:
+    """
+    When false (default): UI focuses on choosing words + uploading/displaying images.
+    When true: also show OpenAI generate / Midjourney prompt export / auto-gen.
+    Set FEATURE_IMAGE_CREATE=1 to enable creation tools.
+    """
+    raw = (os.environ.get("FEATURE_IMAGE_CREATE") or "0").strip().lower()
+    return raw in ("1", "true", "yes", "on")
+
+
+def selection_path_for_bank(bank_path: Path | None = None) -> Path:
+    p = bank_path or STATE["bank_path"]
+    SELECTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    return SELECTIONS_DIR / f"{p.stem}.selection.json"
+
+
+def load_selection(bank_path: Path | None = None) -> dict:
+    path = selection_path_for_bank(bank_path)
+    if not path.exists():
+        return {"bank": (bank_path or STATE["bank_path"]).name, "sorts": {}}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"bank": (bank_path or STATE["bank_path"]).name, "sorts": {}}
+    data.setdefault("sorts", {})
+    return data
+
+
+def save_selection(data: dict, bank_path: Path | None = None) -> Path:
+    path = selection_path_for_bank(bank_path)
+    data = {
+        "bank": (bank_path or STATE["bank_path"]).name,
+        "updated_at": _now(),
+        "sorts": data.get("sorts") or {},
+    }
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def selected_words_for_sort(sort_id: str | None, bank_path: Path | None = None) -> list[str] | None:
+    """Return selected words for a sort, or None if no selection saved yet."""
+    if not sort_id:
+        return None
+    sorts = load_selection(bank_path).get("sorts") or {}
+    if sort_id not in sorts:
+        return None
+    words = sorts.get(sort_id) or []
+    return [str(w).strip().lower() for w in words if str(w).strip()]
+
+
+def list_sort_word_candidates(sort_id: str | None) -> dict:
+    """Words available for a sort with metrics + selection + image status."""
+    bank = load_bank()
+    if not bank:
+        return {"error": "No bank loaded", "items": []}
+    sorts = bank.get("sorts") or []
+    if sort_id:
+        sorts = [s for s in sorts if s.get("id") == sort_id]
+        if not sorts:
+            return {"error": f"Sort not found: {sort_id}", "items": []}
+    biem = osc.load_biemiller_lookup(STATE["biemiller_path"])
+    manifest = osc.load_manifest(STATE["manifest_path"])
+    cards = manifest.get("cards") or {}
+    selected = set(selected_words_for_sort(sort_id) or [])
+    has_explicit = selected_words_for_sort(sort_id) is not None
+
+    by_word: dict[str, dict] = {}
+    for s in sorts:
+        sid = s.get("id")
+        for w in s.get("words") or []:
+            word = (w.get("word") or "").strip().lower()
+            if not word:
+                continue
+            if word in by_word:
+                if sid and sid not in by_word[word]["sort_ids"]:
+                    by_word[word]["sort_ids"].append(sid)
+                continue
+            bi = biem.get(word) or {}
+            entry = cards.get(word) or {}
+            img = entry.get("image")
+            has_png = bool(
+                img and str(img).lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
+                and Path(str(img)).exists()
+            )
+            mean = w.get("rating_mean")
+            if mean is None:
+                mean = w.get("mean")
+            if mean is None:
+                mean = bi.get("rating_mean")
+            by_word[word] = {
+                "word": word,
+                "spelling": w.get("spelling"),
+                "position": w.get("position"),
+                "rating_mean": mean,
+                "freq_pm": w.get("freq_pm") if w.get("freq_pm") is not None else bi.get("freq_pm"),
+                "pos": w.get("pos") or bi.get("pos"),
+                "meaning": w.get("meaning") or bi.get("meaning"),
+                "noun": bool(w.get("noun") if w.get("noun") is not None else str(w.get("pos") or bi.get("pos") or "").lower().startswith("n")),
+                "sort_ids": [sid] if sid else [],
+                "selected": (word in selected) if has_explicit else True,
+                "has_image": has_png,
+                "image_status": entry.get("status") if entry else None,
+            }
+    items = list(by_word.values())
+    items.sort(key=lambda x: (-(x.get("rating_mean") or 0), x["word"]))
+    return {
+        "sort_id": sort_id,
+        "has_selection": has_explicit,
+        "selected_count": sum(1 for i in items if i["selected"]),
+        "items": items,
+        "image_create": feature_image_create(),
+    }
 
 JOBS: dict[str, dict] = {}
 JOBS_LOCK = threading.Lock()
@@ -685,15 +800,21 @@ BUILDER_HTML = r"""
     font-size: 0.82rem; line-height: 1.4; margin-top: 0.5rem;
   }
   .flow-note { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.75rem; }
+  .word-pick-tools { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.5rem 0 0.75rem; }
+  .word-pick-tools button { padding:0.35rem 0.65rem; font-size:0.8rem; }
+  #wordPickTable table { font-size:0.85rem; }
+  #wordPickTable td.meaning { max-width:220px; color:var(--muted); }
+  #wordPickTable tr.unselected { opacity:0.45; }
+  .feat-off { display:none !important; }
 </style>
 </head>
 <body>
 <header>
   <h1>Word Sort Builder</h1>
-  <p>Build a bank → generate cards → review → export pack &amp; edit the tutor script — one continuous flow.</p>
+  <p>Build a bank → choose words → upload pictures → review → export pack &amp; edit the tutor script.</p>
 </header>
 <nav class="steps">
-  <span>1 Bank</span><span>2 Generate</span><span>3 Review</span><span>4 Pack &amp; script</span>
+  <span>1 Bank</span><span>2 Choose words</span><span>3 Pictures</span><span>4 Pack &amp; script</span>
 </nav>
 <main>
   <section class="panel" id="bankPanel">
@@ -751,64 +872,80 @@ BUILDER_HTML = r"""
     </details>
   </section>
 
-  <section class="panel" id="queuePanel">
-    <h2>2. Queue card generation</h2>
+  <section class="panel span2" id="queuePanel">
+    <h2>2. Choose words for the sort</h2>
     <p class="flow-note" id="activeBankLabel">Using newest bank: —</p>
+    <p class="flow-note">Check the words you want in this closed sort. Tutor scripts use only these words (and their pictures once uploaded). Default bank list is ranked by Rating.Mean.</p>
     <label>Sort</label>
-    <select id="sortSelect"><option value="">All sorts in bank</option></select>
-    <div class="row">
-      <div>
-        <label>Next N words (highest Rating.Mean first)</label>
-        <input id="limit" type="number" min="1" max="50" value="4" />
-      </div>
-      <div>
-        <label>Parallel jobs (1–6) — OpenAI only</label>
-        <input id="concurrency" type="number" min="1" max="6" value="3" />
-      </div>
-      <div>
-        <label>&nbsp;</label>
-        <label style="font-weight:500"><input type="checkbox" id="dryRun" /> Dry run (no API)</label>
-      </div>
+    <select id="sortSelect"><option value="">Pick a sort…</option></select>
+    <div class="word-pick-tools">
+      <button type="button" class="secondary" id="btnSelectAllWords">Select all</button>
+      <button type="button" class="secondary" id="btnSelectNouns">Nouns only</button>
+      <button type="button" class="secondary" id="btnSelectTop8">Top 8 by Mean</button>
+      <button type="button" class="secondary" id="btnClearWords">Clear</button>
+      <button type="button" id="btnSaveWords">Save word selection</button>
     </div>
-    <div class="row" style="margin-top:0.9rem">
-      <button type="button" class="secondary" id="btnPreview">Preview queue</button>
-      <button type="button" id="btnGenerate">Generate with OpenAI</button>
-    </div>
-    <p class="status" id="genStatus"></p>
-    <div id="genProgressWrap" class="hidden">
-      <div class="progress"><span id="genProgressBar"></span></div>
-      <p class="muted" id="genEta" style="margin:0.35rem 0 0"></p>
-    </div>
-    <div id="jobLog" class="log hidden"></div>
-    <h3>Will generate / export</h3>
-    <div id="pendingTable" class="muted">Queue loads automatically from the active bank.</div>
+    <p class="status" id="wordStatus"></p>
+    <div id="wordPickTable" class="muted">Pick a sort to load candidates.</div>
 
-    <h3 style="margin-top:1.1rem">Midjourney (manual)</h3>
-    <p class="flow-note">No Midjourney API — export includes a <strong>batch permutation</strong> paste (plus individual prompts). Prompts use Biemiller meanings so pictures show what the word means. Save as <code>word.png</code>, then Import.</p>
+    <h3 style="margin-top:1.1rem">Upload pictures</h3>
+    <p class="flow-note">Save files as <code>word.png</code> (e.g. <code>man.png</code>), then import. Review/approve in step 3. Scripts still gradually release the same selected words across the week.</p>
     <div class="row">
-      <button type="button" class="secondary" id="btnMjExport">Export Midjourney prompts</button>
       <label class="secondary" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 0.9rem;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-weight:600">
-        Import Midjourney images
+        Import images
         <input type="file" id="mjImportFiles" accept="image/png,image/jpeg,.png,.jpg,.jpeg" multiple hidden />
       </label>
     </div>
     <p class="status" id="mjStatus"></p>
+
+    <details class="drawer feat-image-create" id="imageCreateDrawer" style="margin-top:1rem">
+      <summary><span>Image creation tools <span class="active-chip">feature flag</span></span></summary>
+      <div class="drawer-body">
+        <p class="flow-note">Enabled with <code>FEATURE_IMAGE_CREATE=1</code>. Kept for OpenAI generate / Midjourney prompt export.</p>
+        <div class="row">
+          <div>
+            <label>Next N words</label>
+            <input id="limit" type="number" min="1" max="50" value="4" />
+          </div>
+          <div>
+            <label>Parallel jobs (1–6)</label>
+            <input id="concurrency" type="number" min="1" max="6" value="3" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <label style="font-weight:500"><input type="checkbox" id="dryRun" /> Dry run</label>
+          </div>
+        </div>
+        <div class="row" style="margin-top:0.75rem">
+          <button type="button" class="secondary" id="btnPreview">Preview queue</button>
+          <button type="button" id="btnGenerate">Generate with OpenAI</button>
+          <button type="button" class="secondary" id="btnMjExport">Export Midjourney prompts</button>
+        </div>
+        <p class="status" id="genStatus"></p>
+        <div id="genProgressWrap" class="hidden">
+          <div class="progress"><span id="genProgressBar"></span></div>
+          <p class="muted" id="genEta" style="margin:0.35rem 0 0"></p>
+        </div>
+        <div id="jobLog" class="log hidden"></div>
+        <div id="pendingTable" class="muted" style="margin-top:0.5rem"></div>
+      </div>
+    </details>
   </section>
 
   <section class="panel span2" id="reviewPanel">
-    <h2>3. Review cards</h2>
+    <h2>3. Review pictures</h2>
     <p class="muted" id="reviewStats">Loading review queue…</p>
     <div class="row" style="margin-bottom:0.5rem; align-items:center; flex-wrap:wrap">
       <button type="button" class="secondary" id="btnRefreshReview">Refresh</button>
-      <button type="button" class="secondary" id="btnRegenSelected">Regen selected</button>
+      <button type="button" class="secondary feat-image-create" id="btnRegenSelected">Regen selected</button>
       <button type="button" class="secondary" id="btnApproveSelected">Approve selected</button>
       <button type="button" class="secondary" id="btnRejectSelected">Reject selected</button>
       <label style="font-weight:500; margin:0">
         <input type="checkbox" id="autoAdvance" checked />
         Auto-advance after rating
       </label>
-      <label style="font-weight:500; margin:0">
-        <input type="checkbox" id="autoGenMissing" checked />
+      <label class="feat-image-create" style="font-weight:500; margin:0">
+        <input type="checkbox" id="autoGenMissing" />
         Auto-generate missing images
       </label>
     </div>
@@ -861,6 +998,7 @@ BUILDER_HTML = r"""
   </section>
 </main>
 <script>
+const FEATURES = __FEATURES_JSON__;
 let mode = "lesson";
 let activeBank = null;
 let pollTimer = null;
@@ -873,7 +1011,18 @@ let loadingWords = new Set();
 let autoGenStarted = new Set();
 let swipeBound = false;
 let preferNewestBank = true;
+let wordCandidates = [];
 const REVIEW_FILTERS = ["needs_attention", "all", "accepted", "needs_rework", "pending_review", "failed", "skipped"];
+
+function applyFeatureFlags() {
+  const on = !!(FEATURES && FEATURES.image_create);
+  document.querySelectorAll(".feat-image-create").forEach(el => {
+    el.classList.toggle("feat-off", !on);
+  });
+  const autoGen = document.getElementById("autoGenMissing");
+  if (autoGen && !on) autoGen.checked = false;
+}
+applyFeatureFlags();
 
 function reviewList() {
   return filteredReview();
@@ -1497,10 +1646,132 @@ function fillSorts(summary) {
   const sel = document.getElementById("sortSelect");
   const exportSort = document.getElementById("exportSort");
   const sorts = summary?.sorts || [];
-  sel.innerHTML = `<option value="">All sorts in bank</option>` +
+  const prev = sel.value;
+  sel.innerHTML = `<option value="">Pick a sort…</option>` +
     sorts.map(s => `<option value="${s.id}">${s.id} (${s.word_count} words) [${(s.headers||[]).join(", ")}]</option>`).join("");
-  if (sorts[0] && exportSort) exportSort.value = sorts[0].id;
+  if (prev && sorts.some(s => s.id === prev)) sel.value = prev;
+  else if (sorts[0]) sel.value = sorts[0].id;
+  if (sorts[0] && exportSort) exportSort.value = sel.value || sorts[0].id;
+  loadWordPick().catch(() => {});
 }
+
+function fmtMean(n) {
+  if (n == null || n === "") return "—";
+  const x = Number(n);
+  return Number.isNaN(x) ? "—" : x.toFixed(1);
+}
+
+function renderWordPick(data) {
+  const el = document.getElementById("wordPickTable");
+  const status = document.getElementById("wordStatus");
+  wordCandidates = data.items || [];
+  if (!wordCandidates.length) {
+    el.textContent = "No words in this sort.";
+    return;
+  }
+  const selectedN = wordCandidates.filter(w => w.selected).length;
+  el.innerHTML = `<p class="muted">${selectedN} selected · ${wordCandidates.length} candidates`
+    + (data.has_selection ? " · saved selection" : " · default: all shown as selected until you save")
+    + `</p>
+    <table><thead><tr>
+      <th></th><th>Word</th><th>Sound</th><th>Mean</th><th>Freq</th><th>POS</th><th>Meaning</th><th>Image</th>
+    </tr></thead><tbody>` +
+    wordCandidates.map(w => `<tr class="${w.selected ? "" : "unselected"}" data-word="${w.word}">
+      <td><input type="checkbox" class="word-check" data-word="${w.word}" ${w.selected ? "checked" : ""} /></td>
+      <td><strong>${w.word}</strong></td>
+      <td>/${w.spelling || "?"}/</td>
+      <td>${fmtMean(w.rating_mean)}</td>
+      <td>${fmtMean(w.freq_pm)}</td>
+      <td>${w.pos || "—"}</td>
+      <td class="meaning">${w.meaning || "—"}</td>
+      <td>${w.has_image ? (w.image_status || "yes") : "—"}</td>
+    </tr>`).join("") + `</tbody></table>`;
+  el.querySelectorAll(".word-check").forEach(cb => {
+    cb.onchange = () => {
+      const row = cb.closest("tr");
+      if (row) row.classList.toggle("unselected", !cb.checked);
+      const item = wordCandidates.find(x => x.word === cb.dataset.word);
+      if (item) item.selected = cb.checked;
+    };
+  });
+  if (status) {
+    status.textContent = `${selectedN} of ${wordCandidates.length} words checked`;
+    status.className = "status ok";
+  }
+}
+
+async function loadWordPick() {
+  const sort = document.getElementById("sortSelect").value;
+  const el = document.getElementById("wordPickTable");
+  const status = document.getElementById("wordStatus");
+  if (!sort) {
+    el.textContent = "Pick a sort to load candidates.";
+    return;
+  }
+  el.textContent = "Loading words…";
+  try {
+    const data = await api(`/api/words?sort=${encodeURIComponent(sort)}`);
+    renderWordPick(data);
+    const exportSort = document.getElementById("exportSort");
+    if (exportSort) exportSort.value = sort;
+  } catch (e) {
+    el.textContent = e.message;
+    if (status) {
+      status.textContent = e.message;
+      status.className = "status err";
+    }
+  }
+}
+
+function checkedWords() {
+  return [...document.querySelectorAll(".word-check:checked")].map(cb => cb.dataset.word);
+}
+
+function setWordChecks(pred) {
+  document.querySelectorAll(".word-check").forEach(cb => {
+    const item = wordCandidates.find(x => x.word === cb.dataset.word);
+    const on = pred(item, cb.dataset.word);
+    cb.checked = on;
+    if (item) item.selected = on;
+    cb.closest("tr")?.classList.toggle("unselected", !on);
+  });
+}
+
+document.getElementById("btnSelectAllWords").onclick = () => setWordChecks(() => true);
+document.getElementById("btnClearWords").onclick = () => setWordChecks(() => false);
+document.getElementById("btnSelectNouns").onclick = () => setWordChecks(item => !!(item && item.noun));
+document.getElementById("btnSelectTop8").onclick = () => {
+  const ranked = [...wordCandidates].sort((a, b) => (b.rating_mean || 0) - (a.rating_mean || 0));
+  const top = new Set(ranked.slice(0, 8).map(w => w.word));
+  setWordChecks((_item, word) => top.has(word));
+};
+
+document.getElementById("btnSaveWords").onclick = async () => {
+  const status = document.getElementById("wordStatus");
+  const sort = document.getElementById("sortSelect").value;
+  if (!sort) {
+    status.textContent = "Pick a sort first.";
+    status.className = "status err";
+    return;
+  }
+  const words = checkedWords();
+  status.textContent = "Saving selection…";
+  status.className = "status";
+  try {
+    const data = await api("/api/words/selection", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ sort, words }),
+    });
+    status.textContent = data.message;
+    status.className = "status ok";
+    await loadWordPick();
+  } catch (e) {
+    status.textContent = e.message;
+    status.className = "status err";
+  }
+};
+
 
 async function selectBank(path) {
   const data = await api("/api/bank/select", {
@@ -1526,7 +1797,8 @@ async function refreshBanks() {
     setActiveBankUi(data.active);
   }
   renderPacks(data.packs || []);
-  await previewQueue();
+  await loadWordPick();
+  if (FEATURES.image_create) await previewQueue();
 }
 
 function renderPacks(packs) {
@@ -1600,6 +1872,7 @@ document.getElementById("btnBuild").onclick = async () => {
     status.className = "status ok";
     setActiveBankUi(data.bank);
     await refreshBanks();
+    await loadWordPick();
     await refreshReview();
     document.getElementById("queuePanel")?.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (e) {
@@ -1627,17 +1900,24 @@ function renderPending(preview) {
 }
 
 document.getElementById("btnPreview").onclick = () => previewQueue();
-document.getElementById("sortSelect").onchange = () => previewQueue();
-document.getElementById("limit").onchange = () => previewQueue();
+document.getElementById("sortSelect").onchange = () => {
+  loadWordPick().catch(() => {});
+  if (FEATURES.image_create) previewQueue().catch(() => {});
+};
+document.getElementById("limit").onchange = () => {
+  if (FEATURES.image_create) previewQueue().catch(() => {});
+};
 
 document.getElementById("btnMjExport").onclick = async () => {
-  const status = document.getElementById("mjStatus");
+  const status = document.getElementById("genStatus") || document.getElementById("mjStatus");
   status.textContent = "Building Midjourney prompt sheet…";
   status.className = "status";
   try {
     const sort = document.getElementById("sortSelect").value || "";
     const limit = Number(document.getElementById("limit").value || 0) || "";
-    const url = `/api/midjourney/export?sort=${encodeURIComponent(sort)}&limit=${limit}&download=1`;
+    const selected = checkedWords();
+    const selParam = selected.length ? `&words=${encodeURIComponent(selected.join(","))}` : "";
+    const url = `/api/midjourney/export?sort=${encodeURIComponent(sort)}&limit=${limit}&download=1${selParam}`;
     const res = await fetch(url);
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
@@ -1797,7 +2077,9 @@ refreshReview().catch(e => {
 
 @app.get("/")
 def builder_index():
-    return render_template_string(BUILDER_HTML)
+    features = {"image_create": feature_image_create()}
+    html = BUILDER_HTML.replace("__FEATURES_JSON__", json.dumps(features))
+    return render_template_string(html)
 
 
 @app.get("/health")
@@ -1807,6 +2089,7 @@ def health():
         "app": "word-sort-builder",
         "bank": STATE["bank_path"].name if STATE["bank_path"].exists() else None,
         "has_openai_key": bool(os.environ.get("OPENAI_API_KEY")),
+        "image_create": feature_image_create(),
     })
 
 
@@ -1902,29 +2185,99 @@ def api_bank_build():
     return jsonify({"bank": bank_summary(bank, out), "path": str(out)})
 
 
+@app.get("/api/config")
+def api_config():
+    return jsonify({"image_create": feature_image_create()})
+
+
+@app.get("/api/words")
+def api_words():
+    sort_id = request.args.get("sort") or None
+    data = list_sort_word_candidates(sort_id)
+    if data.get("error"):
+        return jsonify(data), 400
+    return jsonify(data)
+
+
+@app.post("/api/words/selection")
+def api_words_selection():
+    body = request.get_json(silent=True) or {}
+    sort_id = (body.get("sort") or "").strip()
+    words = body.get("words") or []
+    if not sort_id:
+        return jsonify({"error": "sort required"}), 400
+    if not isinstance(words, list):
+        return jsonify({"error": "words must be a list"}), 400
+    cleaned = []
+    seen = set()
+    for w in words:
+        ww = str(w).strip().lower()
+        if not ww or ww in seen:
+            continue
+        seen.add(ww)
+        cleaned.append(ww)
+    data = load_selection()
+    data.setdefault("sorts", {})[sort_id] = cleaned
+    path = save_selection(data)
+    return jsonify(
+        {
+            "sort": sort_id,
+            "words": cleaned,
+            "count": len(cleaned),
+            "path": str(path),
+            "message": f"Saved {len(cleaned)} word(s) for {sort_id}",
+        }
+    )
+
+
 @app.get("/api/generate/preview")
 def api_generate_preview():
+    if not feature_image_create():
+        return jsonify({"error": "Image creation disabled (FEATURE_IMAGE_CREATE off)"}), 403
     sort_id = request.args.get("sort") or None
     limit_raw = request.args.get("limit") or ""
     limit = int(limit_raw) if str(limit_raw).isdigit() else None
     preview = queue_preview(sort_id, limit)
     if preview.get("error"):
         return jsonify(preview), 400
+    # Prefer saved selection when present
+    selected = selected_words_for_sort(sort_id)
+    if selected is not None:
+        preview["pending"] = [p for p in (preview.get("pending") or []) if p["word"] in selected]
+        preview["will_generate"] = len(preview["pending"][:limit] if limit else preview["pending"])
+        if limit is not None:
+            preview["pending"] = preview["pending"][:limit]
     return jsonify(preview)
 
 
 @app.get("/api/midjourney/export")
 def api_midjourney_export():
-    """Export pending queue words as Midjourney paste prompts (no API call)."""
+    """Export words as Midjourney paste prompts (no API call)."""
+    if not feature_image_create():
+        return jsonify({"error": "Image creation disabled (FEATURE_IMAGE_CREATE off)"}), 403
     sort_id = request.args.get("sort") or None
     limit_raw = request.args.get("limit") or ""
     limit = int(limit_raw) if str(limit_raw).isdigit() else None
-    preview = queue_preview(sort_id, limit)
+    words_raw = request.args.get("words") or ""
+    only = {w.strip().lower() for w in words_raw.split(",") if w.strip()} if words_raw else None
+    if only is None:
+        selected = selected_words_for_sort(sort_id)
+        if selected is not None:
+            only = set(selected)
+    preview = queue_preview(sort_id, None)
     if preview.get("error"):
         return jsonify(preview), 400
     items = preview.get("pending") or []
+    # Also include already-have if explicitly selected and user wants prompts for all selected
+    if only is not None:
+        bank = load_bank()
+        biem = osc.load_biemiller_lookup(STATE["biemiller_path"])
+        all_items = osc.unique_words_from_bank(bank, sort_id, only, biemiller_lookup=biem) if bank else []
+        items = all_items
+    if limit is not None:
+        items = items[:limit]
     if not items:
-        return jsonify({"error": "No pending words to export. Queue is empty."}), 400
+        return jsonify({"error": "No words to export. Save a word selection first."}), 400
     chunk_raw = request.args.get("chunk") or ""
     chunk_size = int(chunk_raw) if str(chunk_raw).isdigit() else osc.MJ_PERM_CHUNK
     chunk_size = max(1, min(chunk_size, 40))
@@ -2052,6 +2405,8 @@ def api_midjourney_import():
 
 @app.post("/api/generate")
 def api_generate():
+    if not feature_image_create():
+        return jsonify({"error": "Image creation disabled (FEATURE_IMAGE_CREATE off)"}), 403
     body = request.get_json(silent=True) or {}
     sort_id = body.get("sort") or None
     limit = body.get("limit")
@@ -2062,6 +2417,10 @@ def api_generate():
     words = body.get("words")
     if isinstance(words, str):
         words = [w.strip() for w in words.split(",") if w.strip()]
+    if not words:
+        selected = selected_words_for_sort(sort_id)
+        if selected is not None:
+            words = selected
     mode = body.get("mode") or ("regenerate" if words else "generate")
     job_id = uuid.uuid4().hex[:12]
     with JOBS_LOCK:
@@ -2105,6 +2464,7 @@ def api_export():
     bank_path = STATE["bank_path"]
     if not bank_path.exists():
         return jsonify({"error": "No active bank"}), 400
+    selected = selected_words_for_sort(sort_id) if sort_id else None
     try:
         pack_dir = eap.export_pack(
             bank_path=bank_path,
@@ -2117,18 +2477,47 @@ def api_export():
             biemiller_path=STATE["biemiller_path"],
         )
         pack = json.loads((pack_dir / "approved.json").read_text(encoding="utf-8"))
+        # Keep pack aligned to saved word selection when present
+        if selected is not None:
+            allow = set(selected)
+            before = len(pack.get("cards") or [])
+            pack["cards"] = [c for c in (pack.get("cards") or []) if c.get("word") in allow]
+            pack["card_count"] = len(pack["cards"])
+            pack["selected_words"] = selected
+            for s in pack.get("sorts") or []:
+                for col in (s.get("columns") or {}).values():
+                    col["words"] = [w for w in (col.get("words") or []) if w in allow]
+                    col["count"] = len(col["words"])
+            (pack_dir / "approved.json").write_text(
+                json.dumps(pack, indent=2, ensure_ascii=False), encoding="utf-8"
+            )
+            # refresh HTML index if helper exists
+            try:
+                if hasattr(eap, "write_pack_index"):
+                    eap.write_pack_index(pack_dir, pack)
+            except Exception:
+                pass
+            trimmed = before - pack["card_count"]
+        else:
+            trimmed = 0
         ready = (pack.get("phase4_hint") or {}).get("ready_sorts") or []
+        msg = (
+            f"Exported {pack_dir.name} · {pack.get('card_count')} cards · "
+            f"ready: {', '.join(ready) or '(none)'}"
+        )
+        if selected is not None:
+            msg += f" · filtered to {len(selected)} selected word(s)"
+            if trimmed:
+                msg += f" (dropped {trimmed} non-selected)"
         return jsonify(
             {
                 "pack_id": pack_dir.name,
                 "path": str(pack_dir),
                 "card_count": pack.get("card_count"),
                 "ready_sorts": ready,
+                "selected_words": selected,
                 "preview_url": f"/packs/{pack_dir.name}/index.html",
-                "message": (
-                    f"Exported {pack_dir.name} · {pack.get('card_count')} cards · "
-                    f"ready: {', '.join(ready) or '(none)'}"
-                ),
+                "message": msg,
             }
         )
     except SystemExit as e:

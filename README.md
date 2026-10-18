@@ -5,19 +5,19 @@ Online + local tool for **closed teacher-directed picture sorts** aligned to TYC
 ## What it does
 
 1. **Build a word bank** from TYCTR GPCs + Biemiller (`Rating.Mean`)
-2. **Generate / refine** picture-sort cards — **OpenAI** in-app, **or Midjourney** via prompt export + PNG import
-3. **Export** an approved pack
-4. **Build a tutor script** (3-day closed picture sort, WTW gradual release) from that pack only
+2. **Choose words** for each sort (checkboxes + Rating.Mean / meaning)
+3. **Upload pictures** for those words → review / approve
+4. **Export** an approved pack + **tutor script** (3-day gradual release) using only selected words
 
-### Midjourney workflow (no API)
+Image *creation* (OpenAI generate / Midjourney prompt export) is behind  
+`FEATURE_IMAGE_CREATE=1` (default **off**). Upload + review display stay available.
 
-1. Build a bank and open the Generate queue.
-2. Click **Export Midjourney prompts**.
-3. Prefer the **BATCH PASTE** block (Midjourney `{a, b, c}` permutations) — one Imagine creates several jobs. Use Fast/Turbo. Caps: Basic 4 / Standard 10 / Pro–Mega 40 per paste.
-4. Prompts include Biemiller **meanings** so the picture shows what the word means, then remains namable as that word for the sort.
-5. Save preferred images as `word.png` (e.g. `man.png`).
-6. Click **Import Midjourney images** and select the PNGs.
-7. Review / approve / export pack as usual.
+### Midjourney workflow (upload path)
+
+1. Build a bank → **Choose words** → **Save word selection**.
+2. Make images externally (or enable `FEATURE_IMAGE_CREATE` for prompt export).
+3. Save as `word.png` → **Import images** → review / approve.
+4. **Export pack & build script** — scripts still gradually release those words across the week.
 
 ## Run locally
 
