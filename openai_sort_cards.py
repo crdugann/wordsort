@@ -44,9 +44,9 @@ except ImportError:
 
 
 DEFAULT_STYLE = (
-    "flat-color children's picture-book illustration, simple shapes, "
-    "warm and inviting, thick clean outlines, plain light background, "
-    "no text, no letters, no watermark, no logo"
+    "storybook modern illustration, quiet mood, clean forms, "
+    "single isolated object only, no scene, no setting, no extra props, "
+    "plain empty background, no text, no letters, no watermark, no logo"
 )
 
 DEFAULT_MODEL = "gpt-image-1"
@@ -127,40 +127,41 @@ def build_prompt(
 
     if sense:
         subject = (
-            f"illustrate the meaning of '{word}'{pos_bit}: {sense}. "
-            f"Depict one clear, concrete scene or object a child would name '{word}'"
+            f"the single object '{word}'{pos_bit} ({sense}), "
+            f"only the thing itself — a child points and says '{word}'"
         )
     else:
         subject = (
-            f"a single clear depiction of '{word}'{pos_bit}, "
-            f"one object or scene a child would name '{word}'"
+            f"the single object '{word}'{pos_bit}, "
+            f"only the thing itself — a child points and says '{word}'"
         )
 
     cue = ""
     if spelling and as_in:
         cue = (
-            f" Picture-sort card for the /{spelling}/ sound as in {as_in}; "
-            f"the image must still be unambiguously namable as '{word}'."
+            f" Picture-sort card for /{spelling}/ as in {as_in}; "
+            f"must be unambiguously namable as '{word}'."
         )
     elif spelling:
         cue = (
             f" Picture-sort card for /{spelling}/; "
-            f"the image must still be unambiguously namable as '{word}'."
+            f"must be unambiguously namable as '{word}'."
         )
 
     return (
-        f"Children's picture-sort card, centered composition, one clear focus only: "
-        f"{subject}.{cue} {style}"
+        f"Isolated object only, centered, no scene: {subject}.{cue} {style}"
     )
 
 
 # Midjourney-friendly base style (paste into web/Discord; no OpenAI call)
+# Prefer bare object cards — avoid storybook "scenes" with extra props/setting.
 DEFAULT_MJ_STYLE = (
-    "flat-color children's picture-book illustration, simple shapes, "
-    "warm and inviting, thick clean outlines, plain light background, "
-    "single centered subject, no text, no letters, no watermark, no logo"
+    "storybook modern illustration, quiet mood, clean forms, "
+    "single isolated object only, no scene, no setting, no extra props, "
+    "no people unless the word is a person, plain empty background, "
+    "no text, no letters, no watermark, no logo"
 )
-DEFAULT_MJ_PARAMS = "--ar 1:1 --stylize 80"
+DEFAULT_MJ_PARAMS = "--no background --ar 1:1 --stylize 80"
 # Midjourney plan caps for one permutation paste (Fast/Turbo only)
 MJ_PERM_CHUNK = 4  # safe default for Basic; Standard=10, Pro/Mega=40
 
@@ -217,17 +218,16 @@ def build_midjourney_batch_prompts(
             sense = _clean_meaning(item.get("meaning"), max_len=100)
             if sense:
                 core = (
-                    f"illustrate '{word}' meaning: {_mj_escape_perm_part(sense)}; "
-                    f"one clear subject a child names '{word}'"
+                    f"isolated '{word}' only ({_mj_escape_perm_part(sense)}), "
+                    f"no scene no props, child names '{word}'"
                 )
             else:
-                core = f"a single clear '{word}' a child would name '{word}'"
+                core = f"isolated '{word}' only, no scene no props, child names '{word}'"
             options.append(core)
             save_as.append(f"{slug(word)}.png")
         perm = "{" + ", ".join(options) + "}"
         prompt = (
-            f"Children's picture-sort card, centered, one focus only: {perm}. "
-            f"{style}"
+            f"Isolated object only, centered, no scene: {perm}. {style}"
         )
         if suffix:
             prompt = f"{prompt} {suffix}"
