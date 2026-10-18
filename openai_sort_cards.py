@@ -204,8 +204,13 @@ def build_midjourney_batch_prompts(
     chunk_size: int = MJ_PERM_CHUNK,
 ) -> list[dict]:
     """
-    Midjourney permutation batches: one paste creates N jobs via {opt1, opt2, ...}.
-    Each option embeds the word + meaning so images reflect definitions.
+    Midjourney permutation batches: one paste creates N jobs via {a, b, c}.
+
+    Important: Midjourney splits on EVERY comma inside {}. Do not put
+    extra clauses (or unescaped commas) inside the braces — that turns
+    4 words into 12+ jobs and hits the Basic plan limit of 4.
+    Shared style/constraints stay OUTSIDE the braces. Meanings stay in
+    the individual-prompt section of the export sheet.
     """
     style = style or DEFAULT_MJ_STYLE
     suffix = (params if params is not None else DEFAULT_MJ_PARAMS).strip()
@@ -214,29 +219,19 @@ def build_midjourney_batch_prompts(
 
     for start in range(0, len(items), chunk_size):
         chunk = items[start : start + chunk_size]
-        options = []
-        save_as = []
-        for item in chunk:
-            word = item["word"]
-            sense = _clean_meaning(item.get("meaning"), max_len=100)
-            if sense:
-                core = (
-                    f"isolated '{word}' only ({_mj_escape_perm_part(sense)}), "
-                    f"no scene no props, child names '{word}'"
-                )
-            else:
-                core = f"isolated '{word}' only, no scene no props, child names '{word}'"
-            options.append(core)
-            save_as.append(f"{slug(word)}.png")
-        perm = "{" + ", ".join(options) + "}"
+        # Only bare words inside {} — one job per word
+        words = [i["word"] for i in chunk]
+        save_as = [f"{slug(w)}.png" for w in words]
+        perm = "{" + ", ".join(words) + "}"
         prompt = (
-            f"Isolated object only, centered, no scene: {perm}. {style}"
+            f"isolated {perm} only, single object, no scene, no setting, "
+            f"no extra props, child can name the object, {style}"
         )
         if suffix:
             prompt = f"{prompt} {suffix}"
         batches.append(
             {
-                "words": [i["word"] for i in chunk],
+                "words": words,
                 "save_as": save_as,
                 "prompt": prompt,
                 "job_count": len(chunk),
@@ -284,13 +279,13 @@ def export_midjourney_bundle(
     )
     text_blocks = [
         "# Midjourney prompt sheet — Word Sort Builder",
-        "# 1) Prefer BATCH PASTE (permutation) below — one Imagine creates several jobs.",
-        "#    Fast/Turbo only. Plan caps: Basic 4 / Standard 10 / Pro-Mega 40 per paste.",
-        "# 2) Or paste individual prompts if you want tighter control.",
-        "# 3) Save preferred image as <word>.png then Import in the builder.",
-        "# Prompts include Biemiller meanings so the picture shows what the word means.",
+        "# 1) Prefer BATCH PASTE below — one /imagine with {word1, word2, ...}.",
+        "#    Fast/Turbo only. Caps: Basic 4 / Standard 10 / Pro-Mega 40 per paste.",
+        "#    Only bare words go inside {}. Extra commas inside {} explode the job count.",
+        "# 2) Use INDIVIDUAL PROMPTS when you need Biemiller meanings in the image.",
+        "# 3) Save preferred image as <word>.png (or rename_mj_downloads.py) then Import.",
         "",
-        "## BATCH PASTE (Midjourney permutations)",
+        "## BATCH PASTE (Midjourney permutations — words only inside braces)",
         "",
     ]
     for i, batch in enumerate(batches, 1):
