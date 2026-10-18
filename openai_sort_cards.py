@@ -44,7 +44,7 @@ except ImportError:
 
 
 DEFAULT_STYLE = (
-    "storybook modern illustration, quiet mood, clean forms, "
+    "Scandi kids book style, calm palette, minimal detail, "
     "single isolated object only, no scene, no setting, no extra props, "
     "pure white background, no gradients, no shadows on background, "
     "print-friendly sparse ink, no text, no letters, no watermark, no logo"
@@ -155,9 +155,9 @@ def build_prompt(
 
 
 # Midjourney-friendly base style (paste into web/Discord; no OpenAI call)
-# Prefer bare object on white — saves color ink when printing cards.
+# Art form fixed; word + meaning stay in the subject clause.
 DEFAULT_MJ_STYLE = (
-    "storybook modern illustration, quiet mood, clean forms, "
+    "Scandi kids book style, calm palette, minimal detail, "
     "single isolated object only, no scene, no setting, no extra props, "
     "no people unless the word is a person, "
     "pure white background, blank white page, no colored backdrop, "
