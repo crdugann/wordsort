@@ -5,9 +5,17 @@ Online + local tool for **closed teacher-directed picture sorts** aligned to TYC
 ## What it does
 
 1. **Build a word bank** from TYCTR GPCs + Biemiller (`Rating.Mean`)
-2. **Generate / refine** OpenAI picture-sort cards (approve, reject, rework)
+2. **Generate / refine** picture-sort cards — **OpenAI** in-app, **or Midjourney** via prompt export + PNG import
 3. **Export** an approved pack
 4. **Build a tutor script** (3-day closed picture sort, WTW gradual release) from that pack only
+
+### Midjourney workflow (no API)
+
+1. Build a bank and open the Generate queue.
+2. Click **Export Midjourney prompts** → paste each prompt into Midjourney.
+3. Save preferred images as `word.png` (e.g. `man.png`).
+4. Click **Import Midjourney images** and select the PNGs.
+5. Review / approve / export pack as usual.
 
 ## Run locally
 

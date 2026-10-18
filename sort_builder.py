@@ -9,7 +9,8 @@ generation → review → export pack → tutor script.
   # open http://127.0.0.1:5055
 
 Review gallery is served at /review (same process).
-Uses OPENAI_API_KEY from .env for generation.
+Uses OPENAI_API_KEY from .env for OpenAI generation, or Midjourney
+prompt export + image import (no Midjourney API).
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from flask import Flask, jsonify, render_template_string, request, send_from_directory
+from flask import Flask, Response, jsonify, render_template_string, request, send_from_directory
 
 import build_sort_bank as bsb
 import export_approved_pack as eap
@@ -757,11 +758,11 @@ BUILDER_HTML = r"""
     <select id="sortSelect"><option value="">All sorts in bank</option></select>
     <div class="row">
       <div>
-        <label>Generate next N (highest Rating.Mean first)</label>
+        <label>Next N words (highest Rating.Mean first)</label>
         <input id="limit" type="number" min="1" max="50" value="4" />
       </div>
       <div>
-        <label>Parallel jobs (1–6)</label>
+        <label>Parallel jobs (1–6) — OpenAI only</label>
         <input id="concurrency" type="number" min="1" max="6" value="3" />
       </div>
       <div>
@@ -771,7 +772,7 @@ BUILDER_HTML = r"""
     </div>
     <div class="row" style="margin-top:0.9rem">
       <button type="button" class="secondary" id="btnPreview">Preview queue</button>
-      <button type="button" id="btnGenerate">Generate cards</button>
+      <button type="button" id="btnGenerate">Generate with OpenAI</button>
     </div>
     <p class="status" id="genStatus"></p>
     <div id="genProgressWrap" class="hidden">
@@ -779,8 +780,19 @@ BUILDER_HTML = r"""
       <p class="muted" id="genEta" style="margin:0.35rem 0 0"></p>
     </div>
     <div id="jobLog" class="log hidden"></div>
-    <h3>Will generate</h3>
+    <h3>Will generate / export</h3>
     <div id="pendingTable" class="muted">Queue loads automatically from the active bank.</div>
+
+    <h3 style="margin-top:1.1rem">Midjourney (manual)</h3>
+    <p class="flow-note">No Midjourney API — export prompts, generate in Midjourney, import PNGs named <code>word.png</code>, then review as usual.</p>
+    <div class="row">
+      <button type="button" class="secondary" id="btnMjExport">Export Midjourney prompts</button>
+      <label class="secondary" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 0.9rem;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-weight:600">
+        Import Midjourney images
+        <input type="file" id="mjImportFiles" accept="image/png,image/jpeg,.png,.jpg,.jpeg" multiple hidden />
+      </label>
+    </div>
+    <p class="status" id="mjStatus"></p>
   </section>
 
   <section class="panel span2" id="reviewPanel">
@@ -1618,6 +1630,62 @@ document.getElementById("btnPreview").onclick = () => previewQueue();
 document.getElementById("sortSelect").onchange = () => previewQueue();
 document.getElementById("limit").onchange = () => previewQueue();
 
+document.getElementById("btnMjExport").onclick = async () => {
+  const status = document.getElementById("mjStatus");
+  status.textContent = "Building Midjourney prompt sheet…";
+  status.className = "status";
+  try {
+    const sort = document.getElementById("sortSelect").value || "";
+    const limit = Number(document.getElementById("limit").value || 0) || "";
+    const url = `/api/midjourney/export?sort=${encodeURIComponent(sort)}&limit=${limit}&download=1`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || res.statusText);
+    }
+    const blob = await res.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = res.headers.get("X-Filename") || "midjourney_prompts.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    status.textContent = "Downloaded Midjourney prompt sheet. Generate in MJ, save as word.png, then Import.";
+    status.className = "status ok";
+  } catch (e) {
+    status.textContent = e.message;
+    status.className = "status err";
+  }
+};
+
+document.getElementById("mjImportFiles").onchange = async (ev) => {
+  const status = document.getElementById("mjStatus");
+  const files = ev.target.files;
+  if (!files || !files.length) return;
+  status.textContent = `Importing ${files.length} image(s)…`;
+  status.className = "status";
+  const fd = new FormData();
+  for (const f of files) fd.append("files", f, f.name);
+  const sort = document.getElementById("sortSelect").value || "";
+  if (sort) fd.append("sort", sort);
+  try {
+    const res = await fetch("/api/midjourney/import", { method: "POST", body: fd });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    const unmatched = (data.unmatched || []).join(", ");
+    status.textContent = data.message + (unmatched ? ` · unmatched: ${unmatched}` : "");
+    status.className = unmatched ? "status err" : "status ok";
+    await previewQueue();
+    await refreshReview();
+  } catch (e) {
+    status.textContent = e.message;
+    status.className = "status err";
+  } finally {
+    ev.target.value = "";
+  }
+};
+
 document.getElementById("btnGenerate").onclick = async () => {
   const status = document.getElementById("genStatus");
   const btn = document.getElementById("btnGenerate");
@@ -1843,6 +1911,136 @@ def api_generate_preview():
     if preview.get("error"):
         return jsonify(preview), 400
     return jsonify(preview)
+
+
+@app.get("/api/midjourney/export")
+def api_midjourney_export():
+    """Export pending queue words as Midjourney paste prompts (no API call)."""
+    sort_id = request.args.get("sort") or None
+    limit_raw = request.args.get("limit") or ""
+    limit = int(limit_raw) if str(limit_raw).isdigit() else None
+    preview = queue_preview(sort_id, limit)
+    if preview.get("error"):
+        return jsonify(preview), 400
+    items = preview.get("pending") or []
+    if not items:
+        return jsonify({"error": "No pending words to export. Queue is empty."}), 400
+    bundle = osc.export_midjourney_bundle(items)
+    if request.args.get("download") in ("1", "true", "yes"):
+        bank_name = STATE["bank_path"].stem if STATE["bank_path"] else "bank"
+        sort_part = osc.slug(sort_id) if sort_id else "all"
+        filename = f"midjourney_prompts_{bank_name}_{sort_part}.txt"
+        return Response(
+            bundle["text"],
+            mimetype="text/plain; charset=utf-8",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+                "X-Filename": filename,
+            },
+        )
+    return jsonify(bundle)
+
+
+@app.post("/api/midjourney/import")
+def api_midjourney_import():
+    """
+    Import Midjourney PNGs into cards/ + manifest as pending_review.
+    Filenames should be word.png (or word_final.png). Optional form field: sort.
+    """
+    files = request.files.getlist("files") or []
+    if not files:
+        one = request.files.get("file")
+        if one:
+            files = [one]
+    if not files:
+        return jsonify({"error": "No files uploaded"}), 400
+
+    sort_id = request.form.get("sort") or request.args.get("sort") or None
+    bank = load_bank()
+    if not bank:
+        return jsonify({"error": "No bank loaded"}), 400
+
+    biem = osc.load_biemiller_lookup(STATE["biemiller_path"])
+    # Match against full bank for this sort (not only pending) so re-imports work
+    items = osc.unique_words_from_bank(bank, sort_id, None, biemiller_lookup=biem)
+    by_word = {i["word"]: i for i in items}
+
+    imported = []
+    unmatched = []
+    errors = []
+
+    for f in files:
+        name = f.filename or ""
+        if not name:
+            continue
+        item = osc.match_item_for_filename(name, by_word)
+        if not item:
+            unmatched.append(name)
+            continue
+        word = item["word"]
+        spelling = item.get("spelling")
+        try:
+            img_bytes = f.read()
+            if not img_bytes:
+                errors.append(f"{name}: empty file")
+                continue
+            # Normalize JPEG uploads to .png path naming via save_versioned_card (.png)
+            prompt = osc.build_midjourney_prompt(
+                word, spelling, item.get("as_in")
+            )
+            with MANIFEST_LOCK:
+                manifest = osc.load_manifest(STATE["manifest_path"])
+                prev = (manifest.get("cards") or {}).get(word)
+                saved = osc.save_versioned_card(
+                    STATE["cards_dir"],
+                    word,
+                    spelling,
+                    img_bytes,
+                    prompt,
+                    note="midjourney import",
+                    entry=prev,
+                )
+                entry = {
+                    "word": word,
+                    "spelling": spelling,
+                    "as_in": item.get("as_in"),
+                    "image": saved["image"],
+                    "version": saved["version"],
+                    "prompt": prompt,
+                    "status": "pending_review",
+                    "source": "midjourney",
+                    "auto_accepted": False,
+                    "rating_mean": item.get("rating_mean") or item.get("mean"),
+                    "freq_pm": item.get("freq_pm"),
+                    "meaning": item.get("meaning"),
+                    "history": osc.merge_history(prev, saved["history_entry"]),
+                    "imported_at": _now(),
+                    "imported_from": name,
+                }
+                if prev and prev.get("sort_ids"):
+                    entry["sort_ids"] = prev["sort_ids"]
+                elif item.get("sort_ids"):
+                    entry["sort_ids"] = item["sort_ids"]
+                manifest.setdefault("cards", {})[word] = entry
+                osc.save_manifest(STATE["manifest_path"], manifest)
+            imported.append({"word": word, "image": saved["image"], "from": name})
+        except Exception as e:
+            errors.append(f"{name}: {e}")
+
+    sync_review_state()
+    msg_parts = [f"Imported {len(imported)} card(s) for review"]
+    if unmatched:
+        msg_parts.append(f"{len(unmatched)} unmatched filename(s)")
+    if errors:
+        msg_parts.append(f"{len(errors)} error(s)")
+    return jsonify(
+        {
+            "imported": imported,
+            "unmatched": unmatched,
+            "errors": errors,
+            "message": " · ".join(msg_parts),
+        }
+    )
 
 
 @app.post("/api/generate")

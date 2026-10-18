@@ -113,6 +113,95 @@ def build_prompt(word: str, spelling: str | None, as_in: str | None, style: str)
     )
 
 
+# Midjourney-friendly base style (paste into web/Discord; no OpenAI call)
+DEFAULT_MJ_STYLE = (
+    "flat-color children's picture-book illustration, simple shapes, "
+    "warm and inviting, thick clean outlines, plain light background, "
+    "single centered object, no text, no letters, no watermark, no logo"
+)
+DEFAULT_MJ_PARAMS = "--ar 1:1 --stylize 80"
+
+
+def build_midjourney_prompt(
+    word: str,
+    spelling: str | None,
+    as_in: str | None,
+    style: str | None = None,
+    params: str | None = None,
+) -> str:
+    """Prompt line ready to paste into Midjourney (web or Discord)."""
+    base = build_prompt(word, spelling, as_in, style or DEFAULT_MJ_STYLE)
+    suffix = (params if params is not None else DEFAULT_MJ_PARAMS).strip()
+    return f"{base} {suffix}".strip() if suffix else base
+
+
+def word_from_image_filename(filename: str) -> str:
+    """
+    Infer word slug from an uploaded Midjourney file name.
+    Accepts: man.png, man_final.png, man_v003.png, m_man.png (returns last segment).
+    """
+    stem = Path(filename).stem.strip().lower()
+    stem = re.sub(r"_v\d+$", "", stem, flags=re.I)
+    stem = re.sub(r"_final$", "", stem, flags=re.I)
+    # optional spelling prefix: m_man → man
+    if "_" in stem:
+        parts = stem.split("_")
+        if len(parts) == 2 and len(parts[0]) <= 3:
+            stem = parts[1]
+    return stem
+
+
+def match_item_for_filename(filename: str, items_by_word: dict[str, dict]) -> dict | None:
+    key = word_from_image_filename(filename)
+    if key in items_by_word:
+        return items_by_word[key]
+    for word, item in items_by_word.items():
+        if slug(word) == key or slug(word) == slug(key):
+            return item
+    return None
+
+
+def export_midjourney_bundle(
+    items: list[dict],
+    style: str | None = None,
+    params: str | None = None,
+) -> dict:
+    """Build export payload + plain-text paste sheet for Midjourney."""
+    rows = []
+    text_blocks = [
+        "# Midjourney prompt sheet — Word Sort Builder",
+        "# Paste each prompt into Midjourney. Save the U1 (or preferred) image as:",
+        "#   <word>.png   e.g. man.png",
+        "# Then use Import Midjourney images in the builder.",
+        "",
+    ]
+    for item in items:
+        word = item["word"]
+        spelling = item.get("spelling")
+        prompt = build_midjourney_prompt(
+            word, spelling, item.get("as_in"), style=style, params=params
+        )
+        rows.append(
+            {
+                "word": word,
+                "spelling": spelling,
+                "as_in": item.get("as_in"),
+                "rating_mean": item.get("rating_mean") or item.get("mean"),
+                "save_as": f"{slug(word)}.png",
+                "prompt": prompt,
+            }
+        )
+        label = f"/{spelling}/" if spelling else "?"
+        text_blocks.append(f"=== {word} ({label}) -> save as {slug(word)}.png ===")
+        text_blocks.append(prompt)
+        text_blocks.append("")
+    return {
+        "count": len(rows),
+        "items": rows,
+        "text": "\n".join(text_blocks).rstrip() + "\n",
+    }
+
+
 def load_biemiller_lookup(path: Path | None = None) -> dict[str, dict]:
     """
     word -> {rating_mean, freq_pm, mean, pos, meaning}
