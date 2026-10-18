@@ -784,7 +784,7 @@ BUILDER_HTML = r"""
     <div id="pendingTable" class="muted">Queue loads automatically from the active bank.</div>
 
     <h3 style="margin-top:1.1rem">Midjourney (manual)</h3>
-    <p class="flow-note">No Midjourney API — export prompts, generate in Midjourney, import PNGs named <code>word.png</code>, then review as usual.</p>
+    <p class="flow-note">No Midjourney API — export includes a <strong>batch permutation</strong> paste (plus individual prompts). Prompts use Biemiller meanings so pictures show what the word means. Save as <code>word.png</code>, then Import.</p>
     <div class="row">
       <button type="button" class="secondary" id="btnMjExport">Export Midjourney prompts</button>
       <label class="secondary" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 0.9rem;border-radius:8px;border:1px solid var(--line);cursor:pointer;font-weight:600">
@@ -1925,7 +1925,10 @@ def api_midjourney_export():
     items = preview.get("pending") or []
     if not items:
         return jsonify({"error": "No pending words to export. Queue is empty."}), 400
-    bundle = osc.export_midjourney_bundle(items)
+    chunk_raw = request.args.get("chunk") or ""
+    chunk_size = int(chunk_raw) if str(chunk_raw).isdigit() else osc.MJ_PERM_CHUNK
+    chunk_size = max(1, min(chunk_size, 40))
+    bundle = osc.export_midjourney_bundle(items, chunk_size=chunk_size)
     if request.args.get("download") in ("1", "true", "yes"):
         bank_name = STATE["bank_path"].stem if STATE["bank_path"] else "bank"
         sort_part = osc.slug(sort_id) if sort_id else "all"
@@ -1986,7 +1989,11 @@ def api_midjourney_import():
                 continue
             # Normalize JPEG uploads to .png path naming via save_versioned_card (.png)
             prompt = osc.build_midjourney_prompt(
-                word, spelling, item.get("as_in")
+                word,
+                spelling,
+                item.get("as_in"),
+                meaning=item.get("meaning"),
+                pos=item.get("pos"),
             )
             with MANIFEST_LOCK:
                 manifest = osc.load_manifest(STATE["manifest_path"])

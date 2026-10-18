@@ -12,10 +12,12 @@ Online + local tool for **closed teacher-directed picture sorts** aligned to TYC
 ### Midjourney workflow (no API)
 
 1. Build a bank and open the Generate queue.
-2. Click **Export Midjourney prompts** → paste each prompt into Midjourney.
-3. Save preferred images as `word.png` (e.g. `man.png`).
-4. Click **Import Midjourney images** and select the PNGs.
-5. Review / approve / export pack as usual.
+2. Click **Export Midjourney prompts**.
+3. Prefer the **BATCH PASTE** block (Midjourney `{a, b, c}` permutations) — one Imagine creates several jobs. Use Fast/Turbo. Caps: Basic 4 / Standard 10 / Pro–Mega 40 per paste.
+4. Prompts include Biemiller **meanings** so the picture shows what the word means, then remains namable as that word for the sort.
+5. Save preferred images as `word.png` (e.g. `man.png`).
+6. Click **Import Midjourney images** and select the PNGs.
+7. Review / approve / export pack as usual.
 
 ## Run locally
 

@@ -98,18 +98,59 @@ def slug(word: str) -> str:
     return s or "word"
 
 
-def build_prompt(word: str, spelling: str | None, as_in: str | None, style: str) -> str:
+def _clean_meaning(meaning: str | None, max_len: int = 140) -> str | None:
+    if not meaning:
+        return None
+    text = " ".join(str(meaning).split()).strip(" .;")
+    if not text:
+        return None
+    if len(text) > max_len:
+        text = text[: max_len - 1].rstrip() + "…"
+    return text
+
+
+def build_prompt(
+    word: str,
+    spelling: str | None,
+    as_in: str | None,
+    style: str,
+    *,
+    meaning: str | None = None,
+    pos: str | None = None,
+) -> str:
+    """
+    Picture-sort prompt that prefers Biemiller/definition meaning so the image
+    shows what the word *means*, not just the orthographic string.
+    """
+    sense = _clean_meaning(meaning)
+    pos_bit = f" ({pos.strip()})" if pos and str(pos).strip() else ""
+
+    if sense:
+        subject = (
+            f"illustrate the meaning of '{word}'{pos_bit}: {sense}. "
+            f"Depict one clear, concrete scene or object a child would name '{word}'"
+        )
+    else:
+        subject = (
+            f"a single clear depiction of '{word}'{pos_bit}, "
+            f"one object or scene a child would name '{word}'"
+        )
+
     cue = ""
     if spelling and as_in:
         cue = (
-            f" The pictured object should be clearly namable as '{word}' "
-            f"(picture-sort card for the /{spelling}/ sound as in {as_in})."
+            f" Picture-sort card for the /{spelling}/ sound as in {as_in}; "
+            f"the image must still be unambiguously namable as '{word}'."
         )
     elif spelling:
-        cue = f" The pictured object should be clearly namable as '{word}'."
+        cue = (
+            f" Picture-sort card for /{spelling}/; "
+            f"the image must still be unambiguously namable as '{word}'."
+        )
+
     return (
-        f"Children's picture-sort card: a single {word}, centered, "
-        f"one clear object only.{cue} {style}"
+        f"Children's picture-sort card, centered composition, one clear focus only: "
+        f"{subject}.{cue} {style}"
     )
 
 
@@ -117,9 +158,11 @@ def build_prompt(word: str, spelling: str | None, as_in: str | None, style: str)
 DEFAULT_MJ_STYLE = (
     "flat-color children's picture-book illustration, simple shapes, "
     "warm and inviting, thick clean outlines, plain light background, "
-    "single centered object, no text, no letters, no watermark, no logo"
+    "single centered subject, no text, no letters, no watermark, no logo"
 )
 DEFAULT_MJ_PARAMS = "--ar 1:1 --stylize 80"
+# Midjourney plan caps for one permutation paste (Fast/Turbo only)
+MJ_PERM_CHUNK = 4  # safe default for Basic; Standard=10, Pro/Mega=40
 
 
 def build_midjourney_prompt(
@@ -128,11 +171,75 @@ def build_midjourney_prompt(
     as_in: str | None,
     style: str | None = None,
     params: str | None = None,
+    *,
+    meaning: str | None = None,
+    pos: str | None = None,
 ) -> str:
     """Prompt line ready to paste into Midjourney (web or Discord)."""
-    base = build_prompt(word, spelling, as_in, style or DEFAULT_MJ_STYLE)
+    base = build_prompt(
+        word,
+        spelling,
+        as_in,
+        style or DEFAULT_MJ_STYLE,
+        meaning=meaning,
+        pos=pos,
+    )
     suffix = (params if params is not None else DEFAULT_MJ_PARAMS).strip()
     return f"{base} {suffix}".strip() if suffix else base
+
+
+def _mj_escape_perm_part(text: str) -> str:
+    """Escape commas inside a Midjourney permutation option."""
+    return text.replace(",", r"\,")
+
+
+def build_midjourney_batch_prompts(
+    items: list[dict],
+    style: str | None = None,
+    params: str | None = None,
+    chunk_size: int = MJ_PERM_CHUNK,
+) -> list[dict]:
+    """
+    Midjourney permutation batches: one paste creates N jobs via {opt1, opt2, ...}.
+    Each option embeds the word + meaning so images reflect definitions.
+    """
+    style = style or DEFAULT_MJ_STYLE
+    suffix = (params if params is not None else DEFAULT_MJ_PARAMS).strip()
+    batches: list[dict] = []
+    chunk_size = max(1, int(chunk_size or MJ_PERM_CHUNK))
+
+    for start in range(0, len(items), chunk_size):
+        chunk = items[start : start + chunk_size]
+        options = []
+        save_as = []
+        for item in chunk:
+            word = item["word"]
+            sense = _clean_meaning(item.get("meaning"), max_len=100)
+            if sense:
+                core = (
+                    f"illustrate '{word}' meaning: {_mj_escape_perm_part(sense)}; "
+                    f"one clear subject a child names '{word}'"
+                )
+            else:
+                core = f"a single clear '{word}' a child would name '{word}'"
+            options.append(core)
+            save_as.append(f"{slug(word)}.png")
+        perm = "{" + ", ".join(options) + "}"
+        prompt = (
+            f"Children's picture-sort card, centered, one focus only: {perm}. "
+            f"{style}"
+        )
+        if suffix:
+            prompt = f"{prompt} {suffix}"
+        batches.append(
+            {
+                "words": [i["word"] for i in chunk],
+                "save_as": save_as,
+                "prompt": prompt,
+                "job_count": len(chunk),
+            }
+        )
+    return batches
 
 
 def word_from_image_filename(filename: str) -> str:
@@ -165,39 +272,72 @@ def export_midjourney_bundle(
     items: list[dict],
     style: str | None = None,
     params: str | None = None,
+    chunk_size: int = MJ_PERM_CHUNK,
 ) -> dict:
     """Build export payload + plain-text paste sheet for Midjourney."""
     rows = []
+    batches = build_midjourney_batch_prompts(
+        items, style=style, params=params, chunk_size=chunk_size
+    )
     text_blocks = [
         "# Midjourney prompt sheet — Word Sort Builder",
-        "# Paste each prompt into Midjourney. Save the U1 (or preferred) image as:",
-        "#   <word>.png   e.g. man.png",
-        "# Then use Import Midjourney images in the builder.",
+        "# 1) Prefer BATCH PASTE (permutation) below — one Imagine creates several jobs.",
+        "#    Fast/Turbo only. Plan caps: Basic 4 / Standard 10 / Pro-Mega 40 per paste.",
+        "# 2) Or paste individual prompts if you want tighter control.",
+        "# 3) Save preferred image as <word>.png then Import in the builder.",
+        "# Prompts include Biemiller meanings so the picture shows what the word means.",
+        "",
+        "## BATCH PASTE (Midjourney permutations)",
         "",
     ]
+    for i, batch in enumerate(batches, 1):
+        words = ", ".join(batch["words"])
+        saves = ", ".join(batch["save_as"])
+        text_blocks.append(
+            f"### Batch {i} — {batch['job_count']} jobs ({words})"
+        )
+        text_blocks.append(f"# Save as: {saves}")
+        text_blocks.append(batch["prompt"])
+        text_blocks.append("")
+
+    text_blocks.append("## INDIVIDUAL PROMPTS")
+    text_blocks.append("")
+
     for item in items:
         word = item["word"]
         spelling = item.get("spelling")
         prompt = build_midjourney_prompt(
-            word, spelling, item.get("as_in"), style=style, params=params
+            word,
+            spelling,
+            item.get("as_in"),
+            style=style,
+            params=params,
+            meaning=item.get("meaning"),
+            pos=item.get("pos"),
         )
         rows.append(
             {
                 "word": word,
                 "spelling": spelling,
                 "as_in": item.get("as_in"),
+                "meaning": item.get("meaning"),
+                "pos": item.get("pos"),
                 "rating_mean": item.get("rating_mean") or item.get("mean"),
                 "save_as": f"{slug(word)}.png",
                 "prompt": prompt,
             }
         )
         label = f"/{spelling}/" if spelling else "?"
-        text_blocks.append(f"=== {word} ({label}) -> save as {slug(word)}.png ===")
+        sense = _clean_meaning(item.get("meaning"), max_len=80) or "(no definition)"
+        text_blocks.append(
+            f"=== {word} ({label}) [{sense}] -> save as {slug(word)}.png ==="
+        )
         text_blocks.append(prompt)
         text_blocks.append("")
     return {
         "count": len(rows),
         "items": rows,
+        "batches": batches,
         "text": "\n".join(text_blocks).rstrip() + "\n",
     }
 
@@ -548,7 +688,14 @@ def process_word(
 ) -> dict:
     word = item["word"]
     spelling = item.get("spelling") or "misc"
-    prompt = build_prompt(word, item.get("spelling"), item.get("as_in"), style)
+    prompt = build_prompt(
+        word,
+        item.get("spelling"),
+        item.get("as_in"),
+        style,
+        meaning=item.get("meaning"),
+        pos=item.get("pos"),
+    )
 
     while True:
         safe_print(f"\n=== {word}  (/{item.get('spelling')}/ as in {item.get('as_in')}) ===")
