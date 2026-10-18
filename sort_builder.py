@@ -604,7 +604,7 @@ BUILDER_HTML = r"""
     background: rgba(255,255,255,0.45);
   }
   main {
-    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem;
+    max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 3rem;
     display: grid; gap: 1rem;
   }
   @media (min-width: 900px) {
@@ -805,6 +805,70 @@ BUILDER_HTML = r"""
   #wordPickTable table { font-size:0.85rem; }
   #wordPickTable td.meaning { max-width:220px; color:var(--muted); }
   #wordPickTable tr.unselected { opacity:0.45; }
+  .word-pick-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    align-items: stretch;
+    margin-top: 0.35rem;
+  }
+  @media (min-width: 980px) {
+    .word-pick-layout {
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+    }
+    .word-pick-layout.scope-wide {
+      grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+    }
+  }
+  .word-pick-list {
+    max-height: 560px; overflow: auto;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: #fff; padding: 0.35rem 0.5rem;
+  }
+  .scope-pane {
+    display: flex; flex-direction: column; min-height: 420px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: rgba(255,255,255,0.7); overflow: hidden;
+  }
+  .scope-toolbar {
+    display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;
+    padding: 0.5rem 0.65rem; border-bottom: 1px solid var(--line);
+    background: #f4f8f5;
+  }
+  .scope-toolbar strong { font-size: 0.82rem; margin-right: 0.25rem; }
+  .scope-toolbar button { padding: 0.3rem 0.55rem; font-size: 0.78rem; }
+  .scope-zoom-label {
+    min-width: 3.2rem; text-align: center; font-size: 0.78rem;
+    color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+  .scope-frame-wrap {
+    position: relative; flex: 1; min-height: 380px; overflow: auto;
+    background: #e8efe9;
+  }
+  .scope-frame-inner {
+    transform-origin: 0 0; width: 100%; height: 100%; min-height: 380px;
+  }
+  .scope-frame-inner iframe, .scope-frame-inner embed {
+    width: 100%; height: 100%; min-height: 380px; border: 0; display: block;
+    background: #fff;
+  }
+  .scope-modal {
+    position: fixed; inset: 0; z-index: 80;
+    background: rgba(18, 28, 22, 0.55);
+    display: flex; align-items: stretch; justify-content: center;
+    padding: 1rem;
+  }
+  .scope-modal.hidden { display: none !important; }
+  .scope-modal-panel {
+    width: min(1200px, 100%); background: var(--panel);
+    border-radius: 14px; border: 1px solid var(--line);
+    box-shadow: var(--shadow); display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .scope-modal .scope-frame-wrap { min-height: calc(100vh - 7rem); }
+  .scope-modal .scope-frame-inner,
+  .scope-modal .scope-frame-inner iframe,
+  .scope-modal .scope-frame-inner embed { min-height: calc(100vh - 7rem); }
   .feat-off { display:none !important; }
 </style>
 </head>
@@ -875,7 +939,7 @@ BUILDER_HTML = r"""
   <section class="panel span2" id="queuePanel">
     <h2>2. Choose words for the sort</h2>
     <p class="flow-note" id="activeBankLabel">Using newest bank: —</p>
-    <p class="flow-note">Check the words you want in this closed sort. Tutor scripts use only these words (and their pictures once uploaded). Default bank list is ranked by Rating.Mean.</p>
+    <p class="flow-note">Check the words you want in this closed sort. Tutor scripts use only these words (and their pictures once uploaded). Default bank list is ranked by Rating.Mean. The TYCTR scope &amp; sequence PDF sits beside the list — zoom, widen, or expand it while you choose.</p>
     <label>Sort</label>
     <select id="sortSelect"><option value="">Pick a sort…</option></select>
     <div class="word-pick-tools">
@@ -886,7 +950,49 @@ BUILDER_HTML = r"""
       <button type="button" id="btnSaveWords">Save word selection</button>
     </div>
     <p class="status" id="wordStatus"></p>
-    <div id="wordPickTable" class="muted">Pick a sort to load candidates.</div>
+    <div class="word-pick-layout" id="wordPickLayout">
+      <div class="word-pick-list muted" id="wordPickTable">Pick a sort to load candidates.</div>
+      <aside class="scope-pane" id="scopePane" aria-label="TYCTR scope and sequence">
+        <div class="scope-toolbar">
+          <strong>TYCTR scope &amp; sequence</strong>
+          <button type="button" class="secondary" id="btnScopeZoomOut" title="Zoom out">−</button>
+          <span class="scope-zoom-label" id="scopeZoomLabel">100%</span>
+          <button type="button" class="secondary" id="btnScopeZoomIn" title="Zoom in">+</button>
+          <button type="button" class="secondary" id="btnScopeZoomReset">Fit</button>
+          <button type="button" class="secondary" id="btnScopeWiden">Widen</button>
+          <button type="button" class="secondary" id="btnScopeExpand">Expand</button>
+          <a class="secondary" id="linkScopePdf" href="/docs/tyctr-scope-sequence.pdf" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;padding:0.3rem 0.55rem;font-size:0.78rem;text-decoration:none;border-radius:8px;border:1px solid var(--line);font-weight:600;color:var(--ink)">Open PDF</a>
+        </div>
+        <div class="scope-frame-wrap" id="scopeFrameWrap">
+          <div class="scope-frame-inner" id="scopeFrameInner">
+            <iframe id="scopePdfFrame" title="TYCTR scope and sequence PDF"
+              src="/docs/tyctr-scope-sequence.pdf#toolbar=1&amp;navpanes=0"></iframe>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="scopeModal" class="scope-modal hidden" role="dialog" aria-modal="true" aria-label="Expanded TYCTR scope PDF">
+      <div class="scope-modal-panel">
+        <div class="scope-toolbar">
+          <strong>TYCTR scope &amp; sequence</strong>
+          <button type="button" class="secondary" id="btnScopeZoomOutModal">−</button>
+          <span class="scope-zoom-label" id="scopeZoomLabelModal">100%</span>
+          <button type="button" class="secondary" id="btnScopeZoomInModal">+</button>
+          <button type="button" class="secondary" id="btnScopeZoomResetModal">Fit</button>
+          <a class="secondary" href="/docs/tyctr-scope-sequence.pdf" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;padding:0.3rem 0.55rem;font-size:0.78rem;text-decoration:none;border-radius:8px;border:1px solid var(--line);font-weight:600;color:var(--ink)">Open PDF</a>
+          <button type="button" id="btnScopeCloseModal" style="margin-left:auto">Close</button>
+        </div>
+        <div class="scope-frame-wrap">
+          <div class="scope-frame-inner" id="scopeFrameInnerModal">
+            <iframe id="scopePdfFrameModal" title="TYCTR scope and sequence PDF (expanded)"
+              src="/docs/tyctr-scope-sequence.pdf#toolbar=1&amp;navpanes=0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <h3 style="margin-top:1.1rem">Upload pictures</h3>
     <p class="flow-note">Save files as <code>word.png</code> (e.g. <code>man.png</code>), then import. Review/approve in step 3. Scripts still gradually release the same selected words across the week.</p>
@@ -1771,6 +1877,71 @@ document.getElementById("btnSaveWords").onclick = async () => {
     status.className = "status err";
   }
 };
+
+let scopeZoom = 1;
+const SCOPE_ZOOM_MIN = 0.6;
+const SCOPE_ZOOM_MAX = 2.5;
+const SCOPE_ZOOM_STEP = 0.15;
+
+function applyScopeZoom() {
+  const pct = Math.round(scopeZoom * 100) + "%";
+  ["scopeZoomLabel", "scopeZoomLabelModal"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = pct;
+  });
+  [
+    ["scopeFrameInner", "scopeFrameWrap"],
+    ["scopeFrameInnerModal", null],
+  ].forEach(([innerId, wrapId]) => {
+    const inner = document.getElementById(innerId);
+    if (!inner) return;
+    inner.style.transform = `scale(${scopeZoom})`;
+    inner.style.width = (100 / scopeZoom) + "%";
+    const wrap = wrapId ? document.getElementById(wrapId) : inner.parentElement;
+    if (wrap) {
+      const base = wrap.classList.contains("scope-frame-wrap")
+        ? Math.max(380, wrap.clientHeight || 380)
+        : 380;
+      inner.style.minHeight = base + "px";
+      const frame = inner.querySelector("iframe");
+      if (frame) frame.style.minHeight = base + "px";
+    }
+  });
+}
+
+function bumpScopeZoom(delta) {
+  scopeZoom = Math.min(SCOPE_ZOOM_MAX, Math.max(SCOPE_ZOOM_MIN, +(scopeZoom + delta).toFixed(2)));
+  applyScopeZoom();
+}
+
+document.getElementById("btnScopeZoomIn").onclick = () => bumpScopeZoom(SCOPE_ZOOM_STEP);
+document.getElementById("btnScopeZoomOut").onclick = () => bumpScopeZoom(-SCOPE_ZOOM_STEP);
+document.getElementById("btnScopeZoomReset").onclick = () => { scopeZoom = 1; applyScopeZoom(); };
+document.getElementById("btnScopeZoomInModal").onclick = () => bumpScopeZoom(SCOPE_ZOOM_STEP);
+document.getElementById("btnScopeZoomOutModal").onclick = () => bumpScopeZoom(-SCOPE_ZOOM_STEP);
+document.getElementById("btnScopeZoomResetModal").onclick = () => { scopeZoom = 1; applyScopeZoom(); };
+
+document.getElementById("btnScopeWiden").onclick = () => {
+  const layout = document.getElementById("wordPickLayout");
+  const btn = document.getElementById("btnScopeWiden");
+  const on = layout.classList.toggle("scope-wide");
+  btn.textContent = on ? "Narrow" : "Widen";
+};
+
+document.getElementById("btnScopeExpand").onclick = () => {
+  document.getElementById("scopeModal").classList.remove("hidden");
+  applyScopeZoom();
+};
+document.getElementById("btnScopeCloseModal").onclick = () => {
+  document.getElementById("scopeModal").classList.add("hidden");
+};
+document.getElementById("scopeModal").addEventListener("click", (e) => {
+  if (e.target.id === "scopeModal") e.currentTarget.classList.add("hidden");
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.getElementById("scopeModal")?.classList.add("hidden");
+});
+applyScopeZoom();
 
 
 async function selectBank(path) {
@@ -2664,6 +2835,22 @@ def api_tutor_script():
 @app.get("/packs/<path:subpath>")
 def serve_pack(subpath: str):
     return send_from_directory(WORKSPACE / "packs", subpath)
+
+
+@app.get("/docs/tyctr-scope-sequence.pdf")
+def serve_tyctr_scope_pdf():
+    """TYCTR GPC scope & sequence PDF for word-choice reference beside the picker."""
+    docs_dir = HERE / "data"
+    name = "tyctr_scope_sequence.pdf"
+    path = docs_dir / name
+    if not path.exists():
+        try:
+            import build_scope_pdf as bsp
+
+            bsp.main()
+        except Exception as e:
+            return jsonify({"error": f"Scope PDF missing and rebuild failed: {e}"}), 404
+    return send_from_directory(docs_dir, name, mimetype="application/pdf")
 
 
 # ---------------------------------------------------------------------------

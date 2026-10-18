@@ -5,7 +5,7 @@ Online + local tool for **closed teacher-directed picture sorts** aligned to TYC
 ## What it does
 
 1. **Build a word bank** from TYCTR GPCs + Biemiller (`Rating.Mean`)
-2. **Choose words** for each sort (checkboxes + Rating.Mean / meaning)
+2. **Choose words** for each sort (checkboxes + Rating.Mean / meaning), with the TYCTR scope & sequence PDF beside the list (zoom / widen / expand)
 3. **Upload pictures** for those words → review / approve
 4. **Export** an approved pack + **tutor script** (3-day gradual release) using only selected words
 
